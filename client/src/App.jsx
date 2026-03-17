@@ -1,6 +1,7 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import GrantSearch from './pages/GrantSearch'
 import GrantDetail from './pages/GrantDetail'
@@ -12,12 +13,22 @@ import Projects from './pages/Projects'
 import QuickMatch from './pages/QuickMatch'
 
 export default function App() {
+  const { pathname } = useLocation()
+  const isLanding = pathname === '/'
+
+  if (isLanding) {
+    return (
+      <Routes>
+        <Route path="/" element={<Landing />} />
+      </Routes>
+    )
+  }
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Navbar />
       <main style={{ flex: 1, marginLeft: 220, overflowY: 'auto' }}>
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/grants" element={<GrantSearch />} />
           <Route path="/grants/:id" element={<GrantDetail />} />
