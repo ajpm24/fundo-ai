@@ -8,6 +8,8 @@ import Applications from './pages/Applications'
 import ApplicationDetail from './pages/ApplicationDetail'
 import Profile from './pages/Profile'
 import Alerts from './pages/Alerts'
+import Projects from './pages/Projects'
+import QuickMatch from './pages/QuickMatch'
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
           <Route path="/grants/:id" element={<GrantDetail />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/applications/:id" element={<ApplicationDetail />} />
+          <Route path="/quickmatch" element={<QuickMatch />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/alerts" element={<Alerts />} />
         </Routes>

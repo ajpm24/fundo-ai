@@ -2,7 +2,11 @@ const Database = require('better-sqlite3')
 const path = require('path')
 const fs = require('fs')
 
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, '../../data/fundo.db')
+// Always resolve DB_PATH relative to the project root (not the process CWD)
+const PROJECT_ROOT = path.join(__dirname, '../../')
+const DB_PATH = process.env.DB_PATH
+  ? path.resolve(PROJECT_ROOT, process.env.DB_PATH)
+  : path.join(PROJECT_ROOT, 'data/fundo.db')
 
 // Ensure data dir exists
 const dataDir = path.dirname(DB_PATH)
@@ -35,13 +39,27 @@ db.exec(`
     source TEXT,
     description TEXT,
     max_amount REAL,
+    min_amount REAL,
     deadline TEXT,
     eligible_sectors TEXT,
     eligible_sizes TEXT,
+    eligible_entities TEXT,
+    eligible_countries TEXT,
     url TEXT,
     is_active INTEGER DEFAULT 1,
+    call_status TEXT DEFAULT 'open',
+    expected_next_open TEXT,
     ai_relevance_score REAL,
     ai_relevance_reason TEXT,
+    funding_type TEXT,
+    funding_rate INTEGER,
+    region TEXT,
+    category TEXT,
+    cofinancing_rate INTEGER,
+    trl_min INTEGER,
+    trl_max INTEGER,
+    consortium_required INTEGER DEFAULT 0,
+    history_years TEXT,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
   );
@@ -52,6 +70,8 @@ db.exec(`
     status TEXT DEFAULT 'rascunho',
     notes TEXT,
     draft_content TEXT,
+    project_budget REAL,
+    estimated_funding REAL,
     submitted_at TEXT,
     deadline_reminder TEXT,
     created_at TEXT DEFAULT (datetime('now')),
@@ -66,6 +86,49 @@ db.exec(`
     is_read INTEGER DEFAULT 0,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS projects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT,
+    sector TEXT,
+    location TEXT,
+    budget REAL,
+    trl INTEGER,
+    entity_type TEXT,
+    countries TEXT,
+    consortium INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS notification_subscriptions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    grant_id INTEGER REFERENCES grants(id),
+    email TEXT,
+    label TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(grant_id, email)
+  );
 `)
+
+// Migrations: add new columns to existing DB without data loss
+const runMigration = (sql) => { try { db.exec(sql) } catch (e) { /* column already exists */ } }
+runMigration('ALTER TABLE grants ADD COLUMN eligible_entities TEXT')
+runMigration('ALTER TABLE grants ADD COLUMN eligible_countries TEXT')
+runMigration('ALTER TABLE grants ADD COLUMN call_status TEXT DEFAULT \'open\'')
+runMigration('ALTER TABLE grants ADD COLUMN expected_next_open TEXT')
+runMigration('ALTER TABLE grants ADD COLUMN funding_rate INTEGER')
+runMigration('ALTER TABLE grants ADD COLUMN trl_min INTEGER')
+runMigration('ALTER TABLE grants ADD COLUMN trl_max INTEGER')
+runMigration('ALTER TABLE grants ADD COLUMN consortium_required INTEGER DEFAULT 0')
+runMigration('ALTER TABLE grants ADD COLUMN history_years TEXT')
+runMigration('ALTER TABLE grants ADD COLUMN cofinancing_rate INTEGER')
+runMigration('ALTER TABLE grants ADD COLUMN min_amount REAL')
+runMigration('ALTER TABLE grants ADD COLUMN funding_type TEXT')
+runMigration('ALTER TABLE grants ADD COLUMN region TEXT')
+runMigration('ALTER TABLE grants ADD COLUMN category TEXT')
+runMigration('ALTER TABLE applications ADD COLUMN project_budget REAL')
+runMigration('ALTER TABLE applications ADD COLUMN estimated_funding REAL')
 
 module.exports = db

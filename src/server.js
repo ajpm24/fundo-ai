@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: require('path').join(__dirname, '../.env'), override: true })
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
@@ -17,8 +17,20 @@ app.use('/api/grants', require('./routes/grants'))
 app.use('/api/applications', require('./routes/applications'))
 app.use('/api/alerts', require('./routes/alerts'))
 app.use('/api/ai', require('./routes/ai'))
+app.use('/api/projects', require('./routes/projects'))
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '1.0.0' }))
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.0' }))
+
+// Manual crawler trigger
+app.post('/api/crawler/run', async (req, res) => {
+  try {
+    const { runCrawler } = require('./jobs/crawler')
+    const result = await runCrawler()
+    res.json({ ok: true, ...result })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
 
 // Serve built React app
 const publicDir = path.join(__dirname, '../public')

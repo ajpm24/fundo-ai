@@ -73,20 +73,29 @@ function checkHighRelevanceGrants() {
 }
 
 function startAlertJobs() {
+  const { runCrawler } = require('./crawler')
+
   // Run once on startup
   setTimeout(() => {
     checkDeadlines()
     checkHighRelevanceGrants()
   }, 3000)
 
-  // Daily at 09:00
+  // Daily at 09:00 — alerts + crawler
   cron.schedule('0 9 * * *', () => {
     console.log('[AlertChecker] Running daily checks...')
     checkDeadlines()
     checkHighRelevanceGrants()
   })
 
+  // Crawler: EU portals every 6h, PT portals daily
+  cron.schedule('0 */6 * * *', () => {
+    console.log('[Crawler] Running 6h crawl...')
+    runCrawler().catch(err => console.error('[Crawler] Error:', err.message))
+  })
+
   console.log('[AlertChecker] Scheduled daily at 09:00')
+  console.log('[Crawler] Scheduled every 6h')
 }
 
 module.exports = { startAlertJobs }
