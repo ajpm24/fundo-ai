@@ -5,6 +5,24 @@ const Anthropic = require('@anthropic-ai/sdk')
 const db = require('../db/database')
 const router = express.Router()
 
+// Parse Anthropic API errors into clean Portuguese messages
+function parseAnthropicError(err) {
+  const msg = err?.message || String(err)
+  if (msg.includes('credit balance') || msg.includes('too low') || msg.includes('402')) {
+    return { code: 'NO_CREDITS', message: 'A chave de API não tem créditos. Adiciona créditos em console.anthropic.com/settings/billing.' }
+  }
+  if (msg.includes('401') || msg.includes('invalid x-api-key') || msg.includes('authentication')) {
+    return { code: 'INVALID_KEY', message: 'Chave de API inválida. Verifica o valor de ANTHROPIC_API_KEY.' }
+  }
+  if (msg.includes('overloaded') || msg.includes('529')) {
+    return { code: 'OVERLOADED', message: 'O serviço de IA está sobrecarregado. Tenta novamente em alguns segundos.' }
+  }
+  if (msg.includes('rate') || msg.includes('429')) {
+    return { code: 'RATE_LIMIT', message: 'Limite de pedidos atingido. Aguarda alguns segundos e tenta novamente.' }
+  }
+  return { code: 'AI_ERROR', message: 'Erro no serviço de IA. Tenta novamente.' }
+}
+
 function fetchRawHtml(url, extraHeaders = {}) {
   return new Promise((resolve) => {
     try {
@@ -27,7 +45,7 @@ function fetchRawHtml(url, extraHeaders = {}) {
         res.on('error', () => resolve(''))
       })
       req.on('error', () => resolve(''))
-      req.setTimeout(12000, () => { req.destroy(); resolve('') })
+      req.setTimeout(6000, () => { req.destroy(); resolve('') })
     } catch { resolve('') }
   })
 }
@@ -196,7 +214,7 @@ Responde APENAS em JSON válido neste formato exato:
     res.json({ scored: allScores.length })
   } catch (err) {
     console.error('AI match error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -281,7 +299,7 @@ Responde APENAS em JSON válido:
     res.json({ added: ids.length, ids })
   } catch (err) {
     console.error('AI search error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -329,7 +347,7 @@ Escreve APENAS a resposta, sem introduções ou explicações.`
     res.json({ draft: message.content[0].text })
   } catch (err) {
     console.error('AI draft error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -379,7 +397,7 @@ Dá um feedback estruturado em JSON:
     res.json(JSON.parse(jsonMatch[0]))
   } catch (err) {
     console.error('AI analyze error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -450,7 +468,7 @@ Responde APENAS em JSON:
     res.json({ scored: enriched.length, scores: enriched })
   } catch (err) {
     console.error('AI match-project error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -564,7 +582,8 @@ Responde APENAS em JSON: {"cae_code": "XXXXX", "cae_description": "Descrição d
     res.json(result)
   } catch (err) {
     console.error('Quick Match analyze error:', err)
-    res.status(500).json({ error: err.message })
+    const parsed = parseAnthropicError(err)
+    res.status(500).json({ error: parsed.message, code: parsed.code })
   }
 })
 
@@ -659,7 +678,8 @@ Responde APENAS em JSON válido:
     res.json({ total_analyzed: parsed.total_analyzed || grants.length, matches: enriched })
   } catch (err) {
     console.error('Quick Match error:', err)
-    res.status(500).json({ error: err.message })
+    const parsed = parseAnthropicError(err)
+    res.status(500).json({ error: parsed.message, code: parsed.code })
   }
 })
 
@@ -768,7 +788,7 @@ Responde APENAS em JSON válido:
     res.json({ enriched, total_processed: grants.length })
   } catch (err) {
     console.error('AI enrich error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -780,7 +800,7 @@ router.post('/scrape', async (req, res) => {
     res.json({ added, message: `Scraping real concluído: +${added} fundos com URLs verificados` })
   } catch (err) {
     console.error('Scrape error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -968,7 +988,7 @@ Responde APENAS em JSON:
     res.json({ fixed: totalFixed, checked: genericGrants.length, message: `${totalFixed} fundos actualizados com URLs específicos` })
   } catch (err) {
     console.error('fix-urls error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 
@@ -1031,7 +1051,7 @@ Responde APENAS em JSON válido:
     res.json(JSON.parse(jsonMatch[0]))
   } catch (err) {
     console.error('AI questions error:', err)
-    res.status(500).json({ error: err.message })
+    const _pe = parseAnthropicError(err); res.status(500).json({ error: _pe.message, code: _pe.code })
   }
 })
 

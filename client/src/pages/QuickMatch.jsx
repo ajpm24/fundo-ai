@@ -45,6 +45,7 @@ export default function QuickMatch() {
   const [nif, setNif] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
   const [analyzeError, setAnalyzeError] = useState('')
+  const [analyzeErrorCode, setAnalyzeErrorCode] = useState('')
 
   // Step 1
   const [analysis, setAnalysis] = useState(null)
@@ -75,7 +76,7 @@ export default function QuickMatch() {
 
   const analyzeWebsite = async () => {
     if (!websiteUrl.trim() && !nif.trim()) return
-    setAnalyzing(true); setAnalyzeError('')
+    setAnalyzing(true); setAnalyzeError(''); setAnalyzeErrorCode('')
     try {
       const r = await fetch('/api/ai/quickmatch/analyze', {
         method: 'POST',
@@ -86,11 +87,11 @@ export default function QuickMatch() {
         })
       })
       const d = await r.json()
-      if (d.error) { setAnalyzeError(d.error); return }
+      if (d.error) { setAnalyzeError(d.error); setAnalyzeErrorCode(d.code || ''); return }
       setAnalysis(d)
       setSelectedProject(0)
       setStep(1)
-    } catch { setAnalyzeError('Erro de ligação ao servidor') }
+    } catch { setAnalyzeError('Erro de ligação ao servidor'); setAnalyzeErrorCode('') }
     finally { setAnalyzing(false) }
   }
 
@@ -202,7 +203,25 @@ export default function QuickMatch() {
             </button>
           </div>
 
-          {analyzeError && <p style={{ color: 'var(--danger)', marginTop: 12, fontSize: 13 }}>❌ {analyzeError}</p>}
+          {analyzeError && (
+            <div style={{
+              marginTop: 16, padding: '12px 16px', borderRadius: 8,
+              background: analyzeErrorCode === 'NO_CREDITS' ? 'rgba(245,158,11,0.12)' : 'rgba(239,68,68,0.1)',
+              border: `1px solid ${analyzeErrorCode === 'NO_CREDITS' ? 'rgba(245,158,11,0.3)' : 'rgba(239,68,68,0.3)'}`,
+              fontSize: 13, lineHeight: 1.6,
+            }}>
+              <strong style={{ color: analyzeErrorCode === 'NO_CREDITS' ? 'var(--warning)' : 'var(--danger)' }}>
+                {analyzeErrorCode === 'NO_CREDITS' ? '⚠️ Sem créditos na API' : '❌ Erro'}
+              </strong>
+              <br />{analyzeError}
+              {analyzeErrorCode === 'NO_CREDITS' && (
+                <><br /><a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noreferrer"
+                  style={{ color: 'var(--warning)', textDecoration: 'underline', fontWeight: 600 }}>
+                  → Adicionar créditos em console.anthropic.com
+                </a></>
+              )}
+            </div>
+          )}
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 16 }}>
             Gratuito · Resultados em segundos · Sem registo necessário
           </p>
@@ -310,7 +329,20 @@ export default function QuickMatch() {
             </div>
           </div>
 
-          {analyzeError && <p style={{ color: 'var(--danger)', fontSize: 13, marginBottom: 12 }}>❌ {analyzeError}</p>}
+          {analyzeError && (
+            <div style={{
+              marginBottom: 12, padding: '10px 14px', borderRadius: 8, fontSize: 13,
+              background: analyzeErrorCode === 'NO_CREDITS' ? 'rgba(245,158,11,0.12)' : 'rgba(239,68,68,0.1)',
+              border: `1px solid ${analyzeErrorCode === 'NO_CREDITS' ? 'rgba(245,158,11,0.3)' : 'rgba(239,68,68,0.3)'}`,
+              color: analyzeErrorCode === 'NO_CREDITS' ? 'var(--warning)' : 'var(--danger)'
+            }}>
+              {analyzeErrorCode === 'NO_CREDITS' ? '⚠️' : '❌'} {analyzeError}
+              {analyzeErrorCode === 'NO_CREDITS' && (
+                <> · <a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noreferrer"
+                  style={{ color: 'var(--warning)', textDecoration: 'underline' }}>Adicionar créditos</a></>
+              )}
+            </div>
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button
