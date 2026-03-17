@@ -1242,22 +1242,60 @@ function enrichGrants() {
 }
 
 function seedGrants() {
-  // Always try to insert missing grants (idempotent by title)
-  const insert = db.prepare(`
-    INSERT OR IGNORE INTO grants (title, source, description, max_amount, min_amount, deadline, eligible_sectors, eligible_sizes, url, funding_type, region, category, cofinancing_rate)
-    VALUES (@title, @source, @description, @max_amount, @min_amount, @deadline, @eligible_sectors, @eligible_sizes, @url, @funding_type, @region, @category, @cofinancing_rate)
+  // Load full export (1260+ grants) if available, otherwise fall back to hardcoded list
+  let allGrants = grants
+  try {
+    const exportPath = require('path').join(__dirname, 'grants-export.json')
+    if (require('fs').existsSync(exportPath)) {
+      allGrants = JSON.parse(require('fs').readFileSync(exportPath, 'utf8'))
+    }
+  } catch (e) { /* use hardcoded fallback */ }
+
+  const upsert = db.prepare(`
+    INSERT OR REPLACE INTO grants (
+      title, source, description, max_amount, min_amount, deadline,
+      eligible_sectors, eligible_sizes, eligible_entities, eligible_countries,
+      url, is_active, funding_type, funding_rate, region, category, cofinancing_rate,
+      trl_min, trl_max, consortium_required, call_status, expected_next_open,
+      history_years, ai_relevance_score, ai_relevance_reason
+    ) VALUES (
+      @title, @source, @description, @max_amount, @min_amount, @deadline,
+      @eligible_sectors, @eligible_sizes, @eligible_entities, @eligible_countries,
+      @url, @is_active, @funding_type, @funding_rate, @region, @category, @cofinancing_rate,
+      @trl_min, @trl_max, @consortium_required, @call_status, @expected_next_open,
+      @history_years, @ai_relevance_score, @ai_relevance_reason
+    )
   `)
-  const insertMany = db.transaction((rows) => {
+  const upsertMany = db.transaction((rows) => {
     let added = 0
     for (const row of rows) {
-      const r = insert.run(row)
+      const r = upsert.run({
+        title: row.title, source: row.source, description: row.description,
+        max_amount: row.max_amount ?? null, min_amount: row.min_amount ?? null,
+        deadline: row.deadline ?? null,
+        eligible_sectors: Array.isArray(row.eligible_sectors) ? JSON.stringify(row.eligible_sectors) : (row.eligible_sectors ?? '[]'),
+        eligible_sizes: Array.isArray(row.eligible_sizes) ? JSON.stringify(row.eligible_sizes) : (row.eligible_sizes ?? '[]'),
+        eligible_entities: Array.isArray(row.eligible_entities) ? JSON.stringify(row.eligible_entities) : (row.eligible_entities ?? '[]'),
+        eligible_countries: Array.isArray(row.eligible_countries) ? JSON.stringify(row.eligible_countries) : (row.eligible_countries ?? '[]'),
+        url: row.url ?? null, is_active: row.is_active ?? 1,
+        funding_type: row.funding_type ?? null, funding_rate: row.funding_rate ?? null,
+        region: row.region ?? 'todas', category: row.category ?? null,
+        cofinancing_rate: row.cofinancing_rate ?? null,
+        trl_min: row.trl_min ?? null, trl_max: row.trl_max ?? null,
+        consortium_required: row.consortium_required ?? 0,
+        call_status: row.call_status ?? 'open',
+        expected_next_open: row.expected_next_open ?? null,
+        history_years: Array.isArray(row.history_years) ? JSON.stringify(row.history_years) : (row.history_years ?? '[]'),
+        ai_relevance_score: row.ai_relevance_score ?? null,
+        ai_relevance_reason: row.ai_relevance_reason ?? null
+      })
       if (r.changes > 0) added++
     }
     return added
   })
-  const added = insertMany(grants)
-  if (added > 0) console.log(`Seeded ${added} new grants (${grants.length} total in seed)`)
-  enrichGrants()
+  const added = upsertMany(allGrants)
+  if (added > 0) console.log(`Seeded ${added} new grants (${allGrants.length} total in seed)`)
+  if (allGrants === grants) enrichGrants()
 }
 
 module.exports = { seedGrants }
