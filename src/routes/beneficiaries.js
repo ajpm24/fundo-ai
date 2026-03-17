@@ -74,6 +74,29 @@ router.get('/', (req, res) => {
   }
 })
 
+// GET /api/beneficiaries/timeline — month-by-month summary of approvals
+router.get('/timeline', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT
+        CASE
+          WHEN approval_date IS NOT NULL THEN strftime('%Y-%m', approval_date)
+          ELSE approval_year || '-01'
+        END as month,
+        COUNT(*) as count,
+        SUM(amount_approved) as total_amount,
+        COUNT(DISTINCT source) as sources
+      FROM beneficiaries
+      GROUP BY month
+      ORDER BY month DESC
+      LIMIT 24
+    `).all()
+    res.json(rows)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // GET /api/beneficiaries/recent — most recent decisions, grouped by grant
 router.get('/recent', (req, res) => {
   try {

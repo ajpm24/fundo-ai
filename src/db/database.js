@@ -119,6 +119,7 @@ db.exec(`
     nif TEXT,
     amount_approved REAL,
     approval_year INTEGER,
+    approval_date TEXT,
     project_title TEXT,
     region TEXT,
     sector TEXT,
@@ -150,5 +151,6 @@ runMigration('ALTER TABLE grants ADD COLUMN region TEXT')
 runMigration('ALTER TABLE grants ADD COLUMN category TEXT')
 runMigration('ALTER TABLE applications ADD COLUMN project_budget REAL')
 runMigration('ALTER TABLE applications ADD COLUMN estimated_funding REAL')
+runMigration('ALTER TABLE beneficiaries ADD COLUMN approval_date TEXT')
 
 module.exports = db
