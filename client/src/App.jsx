@@ -11,6 +11,7 @@ import Profile from './pages/Profile'
 import Alerts from './pages/Alerts'
 import Projects from './pages/Projects'
 import QuickMatch from './pages/QuickMatch'
+import Beneficiaries from './pages/Beneficiaries'
 
 export default function App() {
   const { pathname } = useLocation()
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/alerts" element={<Alerts />} />
+          <Route path="/beneficiaries" element={<Beneficiaries />} />
         </Routes>
       </main>
     </div>

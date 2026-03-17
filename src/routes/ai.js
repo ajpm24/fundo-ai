@@ -559,7 +559,7 @@ Responde APENAS em JSON válido com TODOS estes campos:
     // If CAE was not returned, make a quick follow-up inference call
     if (!result.cae_code && result.sector) {
       const caeMsg = await client.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-haiku-4-5',
         max_tokens: 200,
         messages: [{
           role: 'user',

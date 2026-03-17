@@ -5,6 +5,7 @@ const links = [
   { to: '/dashboard', icon: '⊞', label: 'Dashboard' },
   { to: '/quickmatch', icon: '⚡', label: 'Quick Match' },
   { to: '/grants', icon: '🔍', label: 'Fundos' },
+  { to: '/beneficiaries', icon: '🏆', label: 'Beneficiários' },
   { to: '/projects', icon: '📁', label: 'Projetos' },
   { to: '/applications', icon: '📋', label: 'Candidaturas' },
   { to: '/alerts', icon: '🔔', label: 'Alertas' },

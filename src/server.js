@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const { seedGrants } = require('./db/seed')
+const { seedBeneficiaries } = require('./db/seedBeneficiaries')
 const { startAlertJobs } = require('./jobs/alertChecker')
 
 const app = express()
@@ -18,6 +19,7 @@ app.use('/api/applications', require('./routes/applications'))
 app.use('/api/alerts', require('./routes/alerts'))
 app.use('/api/ai', require('./routes/ai'))
 app.use('/api/projects', require('./routes/projects'))
+app.use('/api/beneficiaries', require('./routes/beneficiaries'))
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.0' }))
 
@@ -26,6 +28,17 @@ app.post('/api/crawler/run', async (req, res) => {
   try {
     const { runCrawler } = require('./jobs/crawler')
     const result = await runCrawler()
+    res.json({ ok: true, ...result })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// Manual beneficiary scraper trigger
+app.post('/api/beneficiaries/scrape', async (req, res) => {
+  try {
+    const { runBeneficiaryScraper } = require('./jobs/beneficiaryScraper')
+    const result = await runBeneficiaryScraper()
     res.json({ ok: true, ...result })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -41,7 +54,11 @@ app.get('*', (req, res) => {
 
 // Seed DB and start jobs
 seedGrants()
+seedBeneficiaries()
 startAlertJobs()
+// Run beneficiary scraper on startup (adds new data, idempotent)
+const { runBeneficiaryScraper } = require('./jobs/beneficiaryScraper')
+runBeneficiaryScraper().catch(() => {})
 
 app.listen(PORT, () => {
   console.log(`FundoAI running on http://localhost:${PORT}`)

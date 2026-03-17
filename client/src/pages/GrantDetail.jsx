@@ -47,11 +47,17 @@ export default function GrantDetail() {
   // AI Questions
   const [questions, setQuestions] = useState(null)
   const [questionsLoading, setQuestionsLoading] = useState(false)
+  // Beneficiaries
+  const [beneficiaries, setBeneficiaries] = useState(null)
 
   useEffect(() => {
     fetch(`/api/grants/${id}`)
       .then(r => r.json())
       .then(d => { setGrant(d); setLoading(false) })
+    fetch(`/api/beneficiaries/grant/${id}`)
+      .then(r => r.json())
+      .then(d => { if (!d.error) setBeneficiaries(d) })
+      .catch(() => {})
   }, [id])
 
   const startApplication = async () => {
@@ -352,6 +358,42 @@ export default function GrantDetail() {
           </div>
         )}
       </div>
+
+      {/* Beneficiaries */}
+      {beneficiaries && beneficiaries.count > 0 && (
+        <div className="card" style={{ marginBottom: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+            <h3>🏆 Beneficiários Aprovados</h3>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              {beneficiaries.total_amount > 0 && <span style={{ fontSize: 13, color: '#22c55e', fontWeight: 600 }}>Total: €{Number(beneficiaries.total_amount).toLocaleString('pt-PT')}</span>}
+              <span style={{ fontSize: 13, color: 'var(--muted)' }}>{beneficiaries.count} empresa{beneficiaries.count !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+          <div>
+            {beneficiaries.beneficiaries.map((b, i) => (
+              <div key={b.id || i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 0', borderBottom: i < beneficiaries.beneficiaries.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                <div style={{ width: 32, height: 32, borderRadius: 7, background: 'var(--bg3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>🏢</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: 14 }}>{b.company_name}</div>
+                  {b.project_title && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.project_title}</div>}
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+                    {b.region && <span style={{ fontSize: 11, color: 'var(--muted)' }}>📍 {b.region}</span>}
+                    {b.sector && <span style={{ fontSize: 11, color: 'var(--muted)' }}>🏭 {b.sector}</span>}
+                    {b.source_url && <a href={b.source_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: '#4f6ef7' }}>fonte ↗</a>}
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  {b.amount_approved != null && <div style={{ fontWeight: 700, color: '#22c55e', fontSize: 13 }}>€{Number(b.amount_approved).toLocaleString('pt-PT')}</div>}
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>{b.approval_year}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, textAlign: 'center' }}>
+            <a href="/beneficiaries" style={{ fontSize: 13, color: '#4f6ef7', textDecoration: 'none' }}>Ver todos os beneficiários →</a>
+          </div>
+        </div>
+      )}
 
       {/* Funding Estimator */}
       <div className="card" style={{ marginBottom: 20 }}>

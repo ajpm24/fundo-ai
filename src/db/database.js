@@ -110,6 +110,26 @@ db.exec(`
     created_at TEXT DEFAULT (datetime('now')),
     UNIQUE(grant_id, email)
   );
+
+  CREATE TABLE IF NOT EXISTS beneficiaries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    grant_id INTEGER REFERENCES grants(id),
+    grant_title TEXT,
+    company_name TEXT NOT NULL,
+    nif TEXT,
+    amount_approved REAL,
+    approval_year INTEGER,
+    project_title TEXT,
+    region TEXT,
+    sector TEXT,
+    source TEXT,
+    source_url TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_beneficiaries_grant ON beneficiaries(grant_id);
+  CREATE INDEX IF NOT EXISTS idx_beneficiaries_year ON beneficiaries(approval_year);
+  CREATE INDEX IF NOT EXISTS idx_beneficiaries_region ON beneficiaries(region);
 `)
 
 // Migrations: add new columns to existing DB without data loss
