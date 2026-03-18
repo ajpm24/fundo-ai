@@ -283,6 +283,262 @@ function RecentTab() {
   )
 }
 
+// ── Import CSV Tab — import from official PT portals ─────────────────────
+const PORTAL_SOURCES = [
+  {
+    name: 'fundos2020.pt',
+    label: 'Portugal 2020 (Fundos2020)',
+    url: 'https://www.fundos2020.pt/site/listaBeneficiarios',
+    description: 'Lista completa de beneficiários do Portugal 2020 — COMPETE2020, POSEUR, PDR2020, etc.',
+    steps: [
+      'Acede a fundos2020.pt/site/listaBeneficiarios',
+      'Seleciona o programa (ex: COMPETE, PDR, POSEUR)',
+      'Clica em "Exportar" → "Excel" ou "CSV"',
+      'Carrega o ficheiro aqui em baixo',
+    ],
+    color: '#4f6ef7',
+  },
+  {
+    name: 'compete2030.pt',
+    label: 'COMPETE2030 / PT2030',
+    url: 'https://www.compete2030.pt/beneficiarios',
+    description: 'Beneficiários do COMPETE2030 — SI Inovação, Digitalização PME, etc.',
+    steps: [
+      'Acede a compete2030.pt/beneficiarios',
+      'Aplica os filtros que quiseres (programa, região, setor)',
+      'Clica em "Exportar lista" → CSV ou Excel',
+      'Carrega o ficheiro aqui',
+    ],
+    color: '#22c55e',
+  },
+  {
+    name: 'recuperarportugal.gov.pt',
+    label: 'PRR — Recuperar Portugal',
+    url: 'https://recuperarportugal.gov.pt/beneficiarios',
+    description: 'Beneficiários das Agendas e investimentos do Plano de Recuperação e Resiliência.',
+    steps: [
+      'Acede a recuperarportugal.gov.pt/beneficiarios',
+      'Seleciona componente e tipologia',
+      'Exporta em formato CSV/Excel',
+      'Carrega o ficheiro aqui',
+    ],
+    color: '#22c55e',
+  },
+  {
+    name: 'ani.pt',
+    label: 'ANI — Projetos I&D',
+    url: 'https://www.ani.pt/projetos',
+    description: 'Projetos de I&D financiados pela ANI — copromoção, individuais, mobilizadores.',
+    steps: [
+      'Acede a ani.pt/projetos',
+      'Pesquisa e filtra por programa/ano',
+      'Exporta os resultados (CSV/Excel)',
+      'Carrega o ficheiro aqui',
+    ],
+    color: '#06b6d4',
+  },
+]
+
+function ImportTab({ onImported }) {
+  const [csvText, setCsvText] = useState('')
+  const [file, setFile] = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [importing, setImporting] = useState(false)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
+  const [activeSource, setActiveSource] = useState(0)
+
+  const handleFile = (e) => {
+    const f = e.target.files?.[0]
+    if (!f) return
+    setFile(f)
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const text = ev.target.result
+      setCsvText(text)
+      // Preview first 5 rows
+      const lines = text.split('\n').slice(0, 6)
+      setPreview(lines)
+    }
+    reader.readAsText(f, 'UTF-8')
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    const f = e.dataTransfer.files?.[0]
+    if (!f) return
+    const fakeEvent = { target: { files: [f] } }
+    handleFile(fakeEvent)
+  }
+
+  const doImport = async () => {
+    if (!csvText.trim()) return
+    setImporting(true); setResult(null); setError(null)
+    try {
+      const r = await fetch('/api/beneficiaries/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ csv: csvText })
+      })
+      const d = await r.json()
+      if (d.ok) {
+        setResult(d)
+        onImported?.()
+      } else {
+        setError(d.error || 'Erro na importação')
+      }
+    } catch (e) {
+      setError(e.message)
+    }
+    setImporting(false)
+  }
+
+  const clearAll = () => { setCsvText(''); setFile(null); setPreview(null); setResult(null); setError(null) }
+
+  return (
+    <div>
+      {/* Info header */}
+      <div style={{ background: 'rgba(79,110,247,0.08)', border: '1px solid rgba(79,110,247,0.2)', borderRadius: 10, padding: '16px 20px', marginBottom: 24 }}>
+        <div style={{ fontWeight: 600, marginBottom: 6, fontSize: 15 }}>📥 Importar beneficiários dos portais oficiais</div>
+        <div style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>
+          Os portais oficiais têm <strong>milhares de beneficiários</strong> que não estão disponíveis por API.
+          Descarrega o ficheiro CSV/Excel do portal que queres e importa-o diretamente aqui.
+          A importação é inteligente — reconhece automaticamente as colunas de qualquer portal português.
+        </div>
+      </div>
+
+      {/* Portal cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12, marginBottom: 28 }}>
+        {PORTAL_SOURCES.map((src, i) => (
+          <div key={src.name} onClick={() => setActiveSource(i)}
+            style={{ background: 'var(--bg2)', border: `2px solid ${activeSource === i ? src.color : 'var(--border)'}`, borderRadius: 10, padding: '14px 16px', cursor: 'pointer', transition: 'all 0.2s' }}>
+            <div style={{ fontWeight: 700, color: src.color, marginBottom: 4, fontSize: 13 }}>{src.label}</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8, lineHeight: 1.4 }}>{src.description}</div>
+            <a href={src.url} target="_blank" rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              style={{ fontSize: 12, color: src.color, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, background: src.color + '15', padding: '4px 10px', borderRadius: 6 }}>
+              Abrir portal ↗
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {/* Steps for selected portal */}
+      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '16px 20px', marginBottom: 24 }}>
+        <div style={{ fontWeight: 600, marginBottom: 12, color: PORTAL_SOURCES[activeSource].color }}>
+          📋 Como exportar de {PORTAL_SOURCES[activeSource].label}:
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {PORTAL_SOURCES[activeSource].steps.map((step, i) => (
+            <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13 }}>
+              <span style={{ minWidth: 22, height: 22, borderRadius: '50%', background: PORTAL_SOURCES[activeSource].color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
+              <span style={{ color: 'var(--text)', lineHeight: 1.5 }}>{step}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Drop zone */}
+      <div onDrop={handleDrop} onDragOver={e => e.preventDefault()}
+        style={{ border: `2px dashed ${file ? '#22c55e' : 'var(--border)'}`, borderRadius: 12, padding: '32px 24px', textAlign: 'center', marginBottom: 20, background: file ? 'rgba(34,197,94,0.05)' : 'var(--bg2)', transition: 'all 0.2s' }}>
+        {file ? (
+          <div>
+            <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
+            <div style={{ fontWeight: 600, color: '#22c55e', marginBottom: 4 }}>{file.name}</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12 }}>{(file.size / 1024).toFixed(1)} KB · {csvText.split('\n').length - 1} linhas</div>
+            <button onClick={clearAll} style={{ padding: '6px 14px', background: 'transparent', border: '1px solid var(--border)', borderRadius: 6, color: 'var(--muted)', cursor: 'pointer', fontSize: 12 }}>Limpar</button>
+          </div>
+        ) : (
+          <div>
+            <div style={{ fontSize: 40, marginBottom: 10 }}>📂</div>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>Arrasta o ficheiro CSV/Excel para aqui</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16 }}>ou clica para selecionar</div>
+            <label style={{ padding: '9px 20px', background: 'var(--accent)', color: '#fff', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+              Selecionar ficheiro
+              <input type="file" accept=".csv,.xlsx,.xls,.txt" onChange={handleFile} style={{ display: 'none' }} />
+            </label>
+          </div>
+        )}
+      </div>
+
+      {/* Or paste CSV */}
+      {!file && (
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 8 }}>Ou cola o conteúdo CSV diretamente:</div>
+          <textarea value={csvText} onChange={e => { setCsvText(e.target.value); setPreview(e.target.value.split('\n').slice(0, 6)) }}
+            placeholder={'Beneficiário;NIF;Programa;Região;Montante Aprovado;Data Aprovação;Projeto\nEmpresa Exemplo, S.A.;500123456;PT2030;Norte;250000;15/03/2024;Projeto X'}
+            style={{ width: '100%', minHeight: 120, padding: '12px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)', fontSize: 13, fontFamily: 'monospace', resize: 'vertical', boxSizing: 'border-box' }} />
+        </div>
+      )}
+
+      {/* Preview */}
+      {preview && preview.length > 1 && (
+        <div style={{ marginBottom: 20, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+          <div style={{ padding: '8px 14px', background: 'var(--bg3)', fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>
+            PRÉ-VISUALIZAÇÃO ({Math.max(0, csvText.split('\n').filter(l => l.trim()).length - 1)} registos no total)
+          </div>
+          <div style={{ overflowX: 'auto', padding: '8px 0' }}>
+            <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
+              {preview.slice(0, 6).map((line, i) => (
+                <tr key={i} style={{ background: i === 0 ? 'var(--bg3)' : i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--border)' }}>
+                  {line.split(/[;,]/).slice(0, 8).map((cell, j) => (
+                    <td key={j} style={{ padding: '5px 12px', color: i === 0 ? 'var(--muted)' : 'var(--text)', fontWeight: i === 0 ? 700 : 400, whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: 180, textOverflow: 'ellipsis' }}>
+                      {cell.replace(/^["']|["']$/g, '').trim() || '—'}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Import button */}
+      {csvText.trim() && (
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <button onClick={doImport} disabled={importing}
+            style={{ padding: '12px 28px', background: importing ? 'var(--bg3)' : '#22c55e', color: '#fff', border: 'none', borderRadius: 8, cursor: importing ? 'wait' : 'pointer', fontSize: 14, fontWeight: 700 }}>
+            {importing ? '⏳ A importar...' : '📥 Importar para a base de dados'}
+          </button>
+          <span style={{ fontSize: 13, color: 'var(--muted)' }}>
+            {csvText.split('\n').filter(l => l.trim()).length - 1} registos encontrados
+          </span>
+        </div>
+      )}
+
+      {/* Result */}
+      {result && (
+        <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 10, background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)' }}>
+          <div style={{ fontWeight: 700, color: '#22c55e', fontSize: 15, marginBottom: 8 }}>✅ Importação concluída!</div>
+          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', fontSize: 13 }}>
+            <span>✅ <strong>{result.added}</strong> novos registos adicionados</span>
+            <span>⏭️ <strong>{result.skipped}</strong> já existiam (ignorados)</span>
+            <span>📊 <strong>{result.total_in_db}</strong> beneficiários na base de dados</span>
+          </div>
+        </div>
+      )}
+      {error && (
+        <div style={{ marginTop: 16, padding: '14px 18px', borderRadius: 10, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444', fontSize: 13 }}>
+          ❌ {error}
+        </div>
+      )}
+
+      {/* Tips */}
+      <div style={{ marginTop: 32, padding: '16px 20px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10 }}>
+        <div style={{ fontWeight: 600, marginBottom: 10 }}>💡 Dicas de importação</div>
+        <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <div>• Suporta <strong>separador ponto-e-vírgula (;) ou vírgula (,)</strong></div>
+          <div>• Reconhece automaticamente as colunas dos portais: <strong>fundos2020.pt, compete2030.pt, recuperarportugal.gov.pt, ani.pt</strong></div>
+          <div>• Colunas obrigatórias: <code style={{ background: 'var(--bg3)', padding: '1px 5px', borderRadius: 4 }}>Beneficiário</code> (ou similar)</div>
+          <div>• Colunas opcionais: NIF, Programa, Região, Montante Aprovado, Data Aprovação, Projeto</div>
+          <div>• Ficheiros Excel (.xlsx): exporta para CSV antes de importar</div>
+          <div>• Registos duplicados são automaticamente ignorados (baseado no NIF + programa)</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Beneficiaries() {
   const [activeTab, setActiveTab] = useState('recent') // 'recent' | 'grants' | 'flat'
   const [data, setData] = useState(null)
@@ -362,6 +618,7 @@ export default function Beneficiaries() {
     { id: 'recent', label: '🕐 Decisões Recentes', desc: 'Últimas aprovações por período' },
     { id: 'grants', label: '📋 Por Programa', desc: 'Agrupado por fundo' },
     { id: 'flat', label: '📊 Lista Completa', desc: 'Todos os beneficiários' },
+    { id: 'import', label: '📥 Importar CSV', desc: 'Importar dos portais oficiais' },
   ]
 
   return (
@@ -431,6 +688,9 @@ export default function Beneficiaries() {
             : filteredGrants.map((g, i) => <GrantBlock key={g.grant_title} grant={g} defaultOpen={i < 2} />)}
         </>
       )}
+
+      {/* ── Tab: Importar CSV ─────────────────────────────────────────────── */}
+      {activeTab === 'import' && <ImportTab onImported={() => { loadStats(); if (activeTab === 'grants') loadGrantView() }} />}
 
       {/* ── Tab: Lista Completa ────────────────────────────────────────────── */}
       {activeTab === 'flat' && (
