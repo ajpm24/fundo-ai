@@ -46,6 +46,23 @@ app.post('/api/beneficiaries/scrape', async (req, res) => {
   }
 })
 
+// Full EU Kohesio import — fetches all 53k+ PT beneficiaries from EU API
+app.post('/api/beneficiaries/import-kohesio', async (req, res) => {
+  try {
+    const { scrapeKohesioFull } = require('./jobs/beneficiaryScraper')
+    // Stream progress via SSE if client wants, otherwise just run and return
+    res.json({ ok: true, message: 'A importar beneficiários EU Kohesio em background...' })
+    scrapeKohesioFull((pct, added, offset) => {
+      console.log(`[Kohesio] ${pct}% | offset=${offset} | added=${added}`)
+    }).then(added => {
+      const total = db.prepare('SELECT COUNT(*) as c FROM beneficiaries').get().c
+      console.log(`[Kohesio] Import completo: ${added} adicionados, ${total} total`)
+    }).catch(e => console.error('[Kohesio] Import error:', e.message))
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // Recent decisions scraper — fetches last N months from DRE, EU Cohesion, Compete2030, PT2030
 app.post('/api/beneficiaries/scrape-recent', async (req, res) => {
   try {

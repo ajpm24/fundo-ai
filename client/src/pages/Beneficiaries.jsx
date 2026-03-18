@@ -347,6 +347,20 @@ function ImportTab({ onImported }) {
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   const [activeSource, setActiveSource] = useState(0)
+  const [kohesioRunning, setKohesioRunning] = useState(false)
+  const [kohesioResult, setKohesioResult] = useState(null)
+
+  const runKohesioImport = async () => {
+    setKohesioRunning(true); setKohesioResult(null)
+    try {
+      const r = await fetch('/api/beneficiaries/import-kohesio', { method: 'POST' })
+      const d = await r.json()
+      setKohesioResult(d)
+      // Poll stats after 30s to show progress
+      setTimeout(() => { onImported?.() }, 30000)
+    } catch (e) { setKohesioResult({ ok: false, error: e.message }) }
+    setKohesioRunning(false)
+  }
 
   const handleFile = (e) => {
     const f = e.target.files?.[0]
@@ -397,13 +411,43 @@ function ImportTab({ onImported }) {
 
   return (
     <div>
+      {/* EU Kohesio auto-import */}
+      <div style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(79,110,247,0.08))', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 12, padding: '20px 24px', marginBottom: 28 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 6 }}>🇪🇺 Importação automática — EU Kohesio (53.000+ registos)</div>
+            <div style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.6, marginBottom: 8 }}>
+              Base de dados oficial da Comissão Europeia com <strong>todas as operações FEDER/FSE/FC em Portugal</strong> acima de €50.000, período 2014-2020.
+              Inclui empresas, municípios, instituições públicas e privadas.
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+              {['53.000+ beneficiários', '€39 mil milhões aprovados', 'Fonte: cohesiondata.ec.europa.eu', 'FEDER + FSE + Fundo de Coesão'].map(t => (
+                <span key={t} style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e', padding: '3px 10px', borderRadius: 20, fontWeight: 500 }}>{t}</span>
+              ))}
+            </div>
+          </div>
+          <div style={{ flexShrink: 0 }}>
+            <button onClick={runKohesioImport} disabled={kohesioRunning}
+              style={{ padding: '12px 24px', background: kohesioRunning ? 'var(--bg3)' : '#22c55e', color: '#fff', border: 'none', borderRadius: 8, cursor: kohesioRunning ? 'wait' : 'pointer', fontSize: 14, fontWeight: 700, whiteSpace: 'nowrap' }}>
+              {kohesioRunning ? '⏳ A importar em background...' : '🚀 Importar agora'}
+            </button>
+          </div>
+        </div>
+        {kohesioResult && (
+          <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, background: kohesioResult.ok ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)', fontSize: 13 }}>
+            {kohesioResult.ok
+              ? '✅ Importação iniciada em background — pode levar 5-10 minutos. Os dados vão aparecer progressivamente na Lista Completa.'
+              : `❌ ${kohesioResult.error}`}
+          </div>
+        )}
+      </div>
+
       {/* Info header */}
       <div style={{ background: 'rgba(79,110,247,0.08)', border: '1px solid rgba(79,110,247,0.2)', borderRadius: 10, padding: '16px 20px', marginBottom: 24 }}>
-        <div style={{ fontWeight: 600, marginBottom: 6, fontSize: 15 }}>📥 Importar beneficiários dos portais oficiais</div>
+        <div style={{ fontWeight: 600, marginBottom: 6, fontSize: 15 }}>📁 Ou importa CSV dos portais nacionais</div>
         <div style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>
-          Os portais oficiais têm <strong>milhares de beneficiários</strong> que não estão disponíveis por API.
-          Descarrega o ficheiro CSV/Excel do portal que queres e importa-o diretamente aqui.
-          A importação é inteligente — reconhece automaticamente as colunas de qualquer portal português.
+          Para dados PT2030, PRR, ANI ou IAPMEI, descarrega o CSV do portal oficial e importa-o aqui.
+          Reconhece automaticamente as colunas de qualquer portal português.
         </div>
       </div>
 
