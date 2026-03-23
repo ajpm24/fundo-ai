@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposta Comercial - Vasco Meska</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1a1a2e;
+            background: #f5f6fa;
+            line-height: 1.6;
+        }
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 50px 60px;
+            min-height: 100vh;
+        }
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-35deg);
+            font-size: 100px;
+            color: rgba(200, 200, 220, 0.12);
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 0;
+            letter-spacing: 10px;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        h1 + p {
+            color: #4f6ef7;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 36px 0 12px;
+        }
+        h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        p, li {
+            font-size: 14px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 20px;
+            font-size: 14px;
+        }
+        th {
+            background: #1a1a2e;
+            color: #fff;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e8e8f0;
+        }
+        tr:last-child td { border-bottom: none; }
+        .info-table td:first-child {
+            font-weight: 700;
+            width: 180px;
+            color: #1a1a2e;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .pricing-card {
+            border: 2px solid #e8e8f0;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .pricing-card.featured {
+            border-color: #4f6ef7;
+        }
+        .pricing-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4f6ef7;
+            margin-bottom: 4px;
+        }
+        .pricing-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+        .pricing-detail {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 4px;
+        }
+        .pricing-detail strong { color: #1a1a2e; }
+        .includes-box {
+            background: #f0f4ff;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 14px;
+            font-size: 13px;
+            color: #333;
+        }
+        .includes-box strong { color: #1a1a2e; }
+        .optional {
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .feature-card {
+            border: 1px solid #e8e8f0;
+            border-radius: 10px;
+            padding: 18px;
+        }
+        .feature-card h3 { font-size: 14px; margin-bottom: 6px; }
+        .feature-card p { font-size: 13px; color: #555; }
+        .note-box {
+            background: #f0f4ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+        .note-box strong { color: #1a1a2e; }
+        .section-divider {
+            border: none;
+            border-top: 2px solid #f0f0f5;
+            margin: 36px 0;
+        }
+        .signature-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .signature-block {
+            border-top: 1px solid #1a1a2e;
+            padding-top: 10px;
+            font-size: 13px;
+        }
+        .signature-block p { margin-bottom: 2px; }
+        @media print {
+            body { background: #fff; }
+            .page { padding: 30px 40px; box-shadow: none; }
+            .watermark { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark">CONFIDENCIAL</div>
+    <div class="page">
+
+        <!-- Header -->
+        <h1>Proposta Comercial</h1>
+        <p>Sistema de Outreach Instagram | at&eacute; 200 contactos por dia</p>
+
+        <table class="info-table">
+            <tr><td>Cliente</td><td>Vasco Meska</td></tr>
+            <tr><td>Data</td><td>23 de mar&ccedil;o de 2026</td></tr>
+            <tr><td>Objetivo</td><td>Criar um sistema cont&iacute;nuo para identificar, qualificar e contactar influencers relevantes.</td></tr>
+            <tr><td>Prazo de arranque</td><td>Arranque ap&oacute;s adjudica&ccedil;&atilde;o e entrada em produ&ccedil;&atilde;o at&eacute; 5 dias ap&oacute;s a adjudica&ccedil;&atilde;o.</td></tr>
+            <tr><td>Formato do servi&ccedil;o</td><td>Configura&ccedil;&atilde;o inicial + mensalidade, com possibilidade de expans&atilde;o internacional.</td></tr>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- Section 1 -->
+        <h2>1. O que este servi&ccedil;o faz</h2>
+        <p>O sistema foi desenhado para trabalhar o mercado portugu&ecirc;s de forma cont&iacute;nua. Em vez de depender de pesquisa manual, o processo passa a ter uma opera&ccedil;&atilde;o estruturada: encontrar perfis relevantes, filtrar o que interessa, contactar automaticamente e entregar contactos j&aacute; qualificados para seguimento.</p>
+
+        <!-- Section 2 -->
+        <h2>2. O que est&aacute; inclu&iacute;do</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Pesquisa e sele&ccedil;&atilde;o de perfis</h3>
+                <p>Pesquisa de influencers com filtros por nicho, n&uacute;mero de seguidores, localiza&ccedil;&atilde;o, idioma e n&iacute;vel de relev&acirc;ncia.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Recolha de contactos</h3>
+                <p>Extra&ccedil;&atilde;o autom&aacute;tica de emails p&uacute;blicos e nomes de utilizador para acelerar o in&iacute;cio do outreach.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Filtragem de perfis</h3>
+                <p>Exclus&atilde;o de perfis fora do perfil pretendido, para reduzir ru&iacute;do e manter o foco nos contactos certos.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Contacto automatizado</h3>
+                <p>Envio de emails e mensagens diretas no Instagram com cad&ecirc;ncia controlada e varia&ccedil;&atilde;o de mensagem.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Qualifica&ccedil;&atilde;o das respostas</h3>
+                <p>Dete&ccedil;&atilde;o de respostas positivas, pedido autom&aacute;tico de m&eacute;tricas e recolha da informa&ccedil;&atilde;o enviada.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Valida&ccedil;&atilde;o e continuidade</h3>
+                <p>Valida&ccedil;&atilde;o manual dos dados recebidos, reposi&ccedil;&atilde;o de novos perfis e relat&oacute;rio di&aacute;rio com interessados.</p>
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <h2>3. Prazos de implementa&ccedil;&atilde;o</h2>
+        <table>
+            <thead>
+                <tr><th>Fase</th><th>Prazo</th><th>Resultado</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Arranque</td>
+                    <td>Ap&oacute;s adjudica&ccedil;&atilde;o</td>
+                    <td>In&iacute;cio da configura&ccedil;&atilde;o de contas, plataformas e processo operacional.</td>
+                </tr>
+                <tr>
+                    <td>Entrada em produ&ccedil;&atilde;o</td>
+                    <td>At&eacute; 5 dias ap&oacute;s adjudica&ccedil;&atilde;o</td>
+                    <td>Sistema ativo com capacidade at&eacute; 200 contactos por dia.</td>
+                </tr>
+                <tr>
+                    <td>Opera&ccedil;&atilde;o cont&iacute;nua</td>
+                    <td>A partir do m&ecirc;s 2</td>
+                    <td>Fluxo est&aacute;vel, com reposi&ccedil;&atilde;o autom&aacute;tica de novos perfis e relat&oacute;rio di&aacute;rio.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- Section 4 -->
+        <h2>4. Investimento em Portugal</h2>
+        <p>No mercado portugu&ecirc;s, a diferen&ccedil;a entre as duas modalidades &eacute; simples: a base automatiza e organiza os interessados; a completa acrescenta acompanhamento humano at&eacute; identificar as pessoas que est&atilde;o prontas a avan&ccedil;ar.</p>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-label">Modalidade Base</div>
+                <div class="pricing-value">1.050 &euro; / m&ecirc;s</div>
+                <p class="pricing-detail"><strong>Configura&ccedil;&atilde;o inicial:</strong> 1.450 &euro;</p>
+                <p class="pricing-detail"><strong>Pagamento inicial:</strong> 2.500 &euro;</p>
+                <p class="pricing-detail" style="color:#888; font-size:12px;">Configura&ccedil;&atilde;o inicial + 1.&ordf; mensalidade</p>
+                <div class="includes-box">
+                    <strong>Inclui:</strong> pesquisa, filtragem, extra&ccedil;&atilde;o de contactos, outreach automatizado, dete&ccedil;&atilde;o de respostas, valida&ccedil;&atilde;o manual e relat&oacute;rio di&aacute;rio.<br><br>
+                    <strong>N&atilde;o inclui:</strong> comunica&ccedil;&atilde;o humana com os influencers at&eacute; &agrave; fase final.
+                </div>
+                <p class="optional">Opcional nesta modalidade: comunica&ccedil;&atilde;o humana para identificar as pessoas que est&atilde;o prontas a avan&ccedil;ar, por + 1.050 &euro; / m&ecirc;s.</p>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-label">Modalidade Completa</div>
+                <div class="pricing-value">1.700 &euro; / m&ecirc;s</div>
+                <p class="pricing-detail"><strong>Configura&ccedil;&atilde;o inicial:</strong> 1.450 &euro;</p>
+                <p class="pricing-detail"><strong>Pagamento inicial:</strong> 3.150 &euro;</p>
+                <p class="pricing-detail" style="color:#888; font-size:12px;">Configura&ccedil;&atilde;o inicial + 1.&ordf; mensalidade</p>
+                <div class="includes-box">
+                    <strong>Inclui tudo o que est&aacute; na modalidade base</strong> e acrescenta acompanhamento humano com os influencers interessados at&eacute; identificar as pessoas que est&atilde;o prontas a avan&ccedil;ar.<br><br>
+                    Indicada para quem quer um servi&ccedil;o mais completo e menos carga operacional interna.
+                </div>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <strong>Nota importante:</strong> todos os valores apresentados nesta proposta s&atilde;o sem IVA. Acresce IVA &agrave; taxa legal em vigor.
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Section 5 -->
+        <h2>5. Expans&atilde;o internacional</h2>
+        <p>Cada mercado internacional funciona como um m&oacute;dulo adicional. Em todos os mercados externos, a mensalidade de <strong>2.200 &euro; / m&ecirc;s</strong> inclui o sistema automatizado, a opera&ccedil;&atilde;o di&aacute;ria e a <strong>equipa humana a comunicar no idioma local</strong> at&eacute; identificar as pessoas que est&atilde;o prontas a avan&ccedil;ar.</p>
+
+        <table>
+            <thead>
+                <tr><th>Mercado</th><th>Cobertura</th><th>Configura&ccedil;&atilde;o inicial</th><th>Mensalidade</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Franc&oacute;fono</td>
+                    <td>Fran&ccedil;a, B&eacute;lgica, Luxemburgo, Su&iacute;&ccedil;a franc&oacute;fona, Qu&eacute;bec, Marrocos, Arg&eacute;lia, Tun&iacute;sia e restantes geografias franc&oacute;fonas.</td>
+                    <td>400 &euro;</td>
+                    <td>2.200 &euro; / m&ecirc;s</td>
+                </tr>
+                <tr>
+                    <td>Angl&oacute;fono</td>
+                    <td>Reino Unido, Irlanda, Austr&aacute;lia, Canad&aacute; angl&oacute;fono, Estados Unidos e restantes geografias de l&iacute;ngua inglesa.</td>
+                    <td>400 &euro;</td>
+                    <td>2.200 &euro; / m&ecirc;s</td>
+                </tr>
+                <tr>
+                    <td>Italiano</td>
+                    <td>It&aacute;lia e Ticino.</td>
+                    <td>400 &euro;</td>
+                    <td>2.200 &euro; / m&ecirc;s</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box">
+            <strong>Inclu&iacute;do na configura&ccedil;&atilde;o inicial:</strong> adapta&ccedil;&atilde;o ao idioma, contas Instagram localizadas e dom&iacute;nios de email adequados ao mercado.<br>
+            <strong>Prazo de ativa&ccedil;&atilde;o:</strong> at&eacute; 3 dias &uacute;teis ap&oacute;s a encomenda.<br>
+            <strong>Refer&ecirc;ncia de pre&ccedil;o por mercado:</strong> cada mercado internacional acrescenta 400 &euro; de configura&ccedil;&atilde;o inicial e 2.200 &euro; / m&ecirc;s.
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Combination examples -->
+        <h2>Exemplos de combina&ccedil;&atilde;o</h2>
+        <table>
+            <thead>
+                <tr><th>Cen&aacute;rio</th><th>Configura&ccedil;&atilde;o inicial total</th><th>Mensal total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Portugal Base</strong></td><td>1.450 &euro;</td><td>1.050 &euro;</td></tr>
+                <tr><td><strong>Portugal Completo</strong></td><td>1.450 &euro;</td><td>1.700 &euro;</td></tr>
+                <tr><td><strong>Portugal Base + 1 mercado externo</strong></td><td>1.850 &euro;</td><td>3.250 &euro;</td></tr>
+                <tr><td><strong>Portugal Base + 2 mercados externos</strong></td><td>2.250 &euro;</td><td>5.450 &euro;</td></tr>
+                <tr><td><strong>Portugal Base + 3 mercados externos</strong></td><td>2.650 &euro;</td><td>7.650 &euro;</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Section 6 -->
+        <h2>6. Condi&ccedil;&otilde;es gerais</h2>
+        <table>
+            <tbody>
+                <tr><td><strong>Dura&ccedil;&atilde;o m&iacute;nima</strong></td><td>1 m&ecirc;s</td></tr>
+                <tr><td><strong>Dura&ccedil;&atilde;o m&aacute;xima</strong></td><td>Sem limite m&aacute;ximo definido</td></tr>
+                <tr><td><strong>Cancelamento</strong></td><td>Sem necessidade de aviso pr&eacute;vio</td></tr>
+                <tr><td><strong>Pagamento Portugal Base</strong></td><td>2.500 &euro; no arranque e 1.050 &euro; / m&ecirc;s nas mensalidades seguintes.</td></tr>
+                <tr><td><strong>Pagamento Portugal Completo</strong></td><td>3.150 &euro; no arranque e 1.700 &euro; / m&ecirc;s nas mensalidades seguintes.</td></tr>
+                <tr><td><strong>Pagamento internacional</strong></td><td>400 &euro; de configura&ccedil;&atilde;o inicial + 2.200 &euro; / m&ecirc;s por cada mercado ativado.</td></tr>
+                <tr><td><strong>IVA</strong></td><td>Acresce IVA &agrave; taxa legal em vigor sobre todos os valores apresentados.</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Section 7 -->
+        <h2>7. Aceita&ccedil;&atilde;o</h2>
+        <p>A aceita&ccedil;&atilde;o desta proposta implica concord&acirc;ncia com os termos acima descritos.</p>
+
+        <div class="signature-area">
+            <div class="signature-block">
+                <p>Prestador de Servi&ccedil;o</p>
+                <p>Data: ______ / ______ / 2026</p>
+            </div>
+            <div class="signature-block">
+                <p>Cliente - Vasco Meska</p>
+                <p>Data: ______ / ______ / 2026</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
