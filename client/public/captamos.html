@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Captamos — O Financiamento que a tua empresa merece</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #000;
+    --black2: #0a0a0a;
+    --black3: #111;
+    --black4: #1a1a1a;
+    --gray1: #222;
+    --gray2: #333;
+    --gray3: #555;
+    --gray4: #777;
+    --gray5: #999;
+    --gray6: #bbb;
+    --white: #fff;
+    --white2: #f5f5f5;
+    --chrome: linear-gradient(135deg, #888 0%, #fff 40%, #aaa 60%, #fff 80%, #777 100%);
+    --chrome2: linear-gradient(90deg, #666, #ddd, #aaa, #fff, #888);
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --glow: 0 0 60px rgba(255,255,255,0.04);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  #cursor {
+    width: 10px; height: 10px;
+    background: white;
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
+    width: 60px; height: 60px; border-color: rgba(255,255,255,0.2);
+  }
+
+  /* SCROLL PROGRESS */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, #555, #fff, #888);
+    z-index: 1000;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+    backdrop-filter: blur(0px);
+  }
+  nav.scrolled {
+    background: rgba(0,0,0,0.85);
+    border-bottom-color: var(--border);
+    backdrop-filter: blur(20px);
+    padding: 16px 60px;
+  }
+  .nav-logo {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
+    background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 200% 100%;
+    animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer { 0%{background-position:0%} 100%{background-position:200%} }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--gray5); font-size: 13px; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: white; }
+  .nav-right { display: flex; gap: 12px; align-items: center; }
+  .btn-nav {
+    padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 600;
+    background: transparent; color: var(--gray5); border: 1px solid var(--border);
+    cursor: none; transition: all 0.2s; font-family: inherit;
+  }
+  .btn-nav:hover { color: white; border-color: var(--border-hover); }
+  .btn-nav-primary {
+    background: white; color: black; border-color: white;
+  }
+  .btn-nav-primary:hover { background: var(--gray6); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; position: relative; overflow: hidden;
+    padding: 120px 40px 80px;
+  }
+
+  /* Grid background */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  /* Radial glow */
+  .hero-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.08; pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb1 { width:300px;height:300px; background:#fff; top:10%;left:10%; animation-delay:0s; }
+  .orb2 { width:200px;height:200px; background:#aaa; top:60%;right:15%; animation-delay:-3s; }
+  .orb3 { width:250px;height:250px; background:#888; bottom:10%;left:40%; animation-delay:-5s; }
+  @keyframes float {
+    0%,100%{transform:translateY(0) scale(1)}
+    50%{transform:translateY(-30px) scale(1.05)}
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--black3); border: 1px solid var(--border);
+    border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+    font-size: 12px; font-weight: 500; color: var(--gray5);
+    animation: fadeUp 0.8s ease both; animation-delay: 0.1s;
+  }
+  .hero-badge-dot { width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite; }
+  @keyframes pulse {0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+
+  .hero-title {
+    font-size: clamp(52px, 8vw, 110px);
+    font-weight: 900; line-height: 0.95; letter-spacing: -4px;
+    margin-bottom: 24px; position: relative;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.2s;
+  }
+  .hero-title .chrome-text {
+    background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 300% 100%;
+    animation: shimmer 6s linear infinite;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px); font-weight: 400; color: var(--gray4);
+    max-width: 560px; line-height: 1.6; margin-bottom: 40px;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.3s;
+  }
+  .hero-sub strong { color: var(--gray6); font-weight: 600; }
+
+  .hero-typewriter {
+    font-size: clamp(14px, 1.5vw, 16px); color: var(--gray4); margin-bottom: 48px;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.35s;
+    height: 24px;
+  }
+  #typewriter-text { color: var(--gray6); font-weight: 500; }
+
+  .hero-ctas {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.4s;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    background: white; color: black; border: none; cursor: none;
+    transition: all 0.25s; font-family: inherit;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+    transform: translateX(-100%); transition: transform 0.4s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,255,255,0.2); }
+  .btn-primary:hover::after { transform: translateX(100%); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    background: transparent; color: var(--gray5); border: 1px solid var(--border);
+    cursor: none; transition: all 0.25s; font-family: inherit;
+  }
+  .btn-ghost:hover { border-color: var(--border-hover); color: white; transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 64px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.8s ease both; animation-delay: 0.5s;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-n {
+    font-size: 28px; font-weight: 800; letter-spacing: -1px;
+    background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 200% 100%;
+    animation: shimmer 5s linear infinite;
+  }
+  .hero-stat-l { font-size: 12px; color: var(--gray4); margin-top: 2px; }
+  .hero-stat-sep { width: 1px; background: var(--border); align-self: stretch; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* TICKER */
+  .ticker-wrap {
+    overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 14px 0; background: var(--black2);
+  }
+  .ticker {
+    display: flex; gap: 0; white-space: nowrap;
+    animation: ticker 25s linear infinite;
+  }
+  .ticker-item {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 0 30px; font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    color: var(--gray4); text-transform: uppercase;
+  }
+  .ticker-dot { width: 4px; height: 4px; background: var(--gray3); border-radius: 50%; }
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* SECTIONS */
+  section { padding: 120px 60px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gray4); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--gray3);
+  }
+  .section-title {
+    font-size: clamp(36px, 5vw, 64px); font-weight: 800;
+    letter-spacing: -2px; line-height: 1.05; margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 18px; color: var(--gray4); line-height: 1.6; max-width: 560px;
+  }
+
+  /* STATS BAND */
+  .stats-band {
+    background: var(--black2);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .stats-band-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-card {
+    padding: 48px 40px; border-right: 1px solid var(--border);
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card:last-child { border-right: none; }
+  .stat-card:hover { background: rgba(255,255,255,0.02); }
+  .stat-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-num {
+    font-size: 52px; font-weight: 900; letter-spacing: -2px; line-height: 1;
+    background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 300% 100%;
+    animation: shimmer 8s linear infinite;
+  }
+  .stat-label { font-size: 13px; color: var(--gray4); margin-top: 8px; font-weight: 500; }
+  .stat-desc { font-size: 12px; color: var(--gray3); margin-top: 4px; }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; margin-top: 64px;
+  }
+  .feat-card {
+    background: var(--black); padding: 40px 36px;
+    transition: background 0.3s; position: relative; overflow: hidden;
+    cursor: none;
+  }
+  .feat-card:hover { background: var(--black3); }
+  .feat-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.04) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feat-card:hover::before { opacity: 1; }
+  .feat-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px; color: rgba(255,255,255,0.65);
+    transition: transform 0.3s, border-color 0.3s, background 0.3s, color 0.3s;
+  }
+  .feat-icon svg { width: 19px; height: 19px; flex-shrink: 0; }
+  .feat-card:hover .feat-icon {
+    transform: scale(1.08) translateY(-1px);
+    border-color: rgba(255,255,255,0.22);
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%);
+    color: white;
+  }
+  .feat-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+  .feat-desc { font-size: 13px; color: var(--gray4); line-height: 1.65; }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    margin-top: 64px; position: relative;
+  }
+  .steps::before {
+    content: ''; position: absolute; top: 28px; left: calc(16.66% + 28px); right: calc(16.66% + 28px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gray2) 20%, var(--gray2) 80%, transparent);
+    background-size: 10px 1px;
+    background-repeat: repeat-x;
+    background-image: repeating-linear-gradient(90deg, var(--gray2) 0px, var(--gray2) 4px, transparent 4px, transparent 10px);
+  }
+  .step { padding: 0 32px; text-align: center; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--gray5);
+    margin: 0 auto 24px; background: var(--black);
+    transition: all 0.3s; position: relative; z-index: 1;
+  }
+  .step:hover .step-num {
+    background: white; color: black; border-color: white;
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+  }
+  .step-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+  .step-desc { font-size: 13px; color: var(--gray4); line-height: 1.6; }
+
+  /* DEMO CARD */
+  .demo-section {
+    max-width: 1200px; margin: 0 auto; padding: 60px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .demo-card {
+    background: var(--black2); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+    transition: transform 0.4s; box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+  .demo-card:hover { transform: perspective(1000px) rotateY(-2deg) rotateX(1deg); }
+  .demo-topbar {
+    background: var(--black3); border-bottom: 1px solid var(--border);
+    padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .demo-url {
+    flex: 1; background: var(--black4); border-radius: 4px;
+    padding: 4px 10px; font-size: 10px; color: var(--gray4); font-family: monospace;
+    margin: 0 8px;
+  }
+  .demo-body { padding: 20px; }
+  .demo-search {
+    background: var(--black3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; font-size: 12px; color: var(--gray4);
+  }
+  .demo-grant {
+    background: var(--black3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; margin-bottom: 10px; transition: border-color 0.2s, background 0.2s;
+    cursor: none;
+  }
+  .demo-grant:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+  .demo-grant-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .demo-grant-title { font-size: 12px; font-weight: 600; color: var(--white); }
+  .demo-grant-amount { font-size: 13px; font-weight: 800; color: #4ade80; }
+  .demo-grant-source { font-size: 10px; color: var(--gray4); }
+  .demo-grant-bar { height: 3px; background: var(--black4); border-radius: 2px; margin-top: 10px; }
+  .demo-grant-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #555, #aaa); }
+  .demo-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 100px;
+    font-size: 9px; font-weight: 600; margin-top: 8px; margin-right: 4px;
+    background: rgba(255,255,255,0.06); color: var(--gray5);
+  }
+  .demo-score {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700; color: #4ade80;
+    background: rgba(74,222,128,0.1); padding: 2px 8px; border-radius: 100px; float: right;
+  }
+
+  .demo-info { }
+  .demo-info .section-label { margin-bottom: 20px; }
+  .demo-info .section-title { font-size: clamp(28px, 3vw, 42px); margin-bottom: 16px; }
+  .demo-info .section-sub { font-size: 15px; max-width: none; margin-bottom: 32px; }
+  .demo-checks { display: flex; flex-direction: column; gap: 14px; }
+  .demo-check { display: flex; align-items: flex-start; gap: 12px; }
+  .demo-check-icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0; margin-top: 1px;
+  }
+  .demo-check-text { font-size: 13px; color: var(--gray5); line-height: 1.5; }
+  .demo-check-text strong { color: var(--white); font-weight: 600; }
+
+  /* AUDIENCE */
+  .audience-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 64px;
+  }
+  .aud-card {
+    background: var(--black2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 32px 24px; text-align: center; cursor: none;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .aud-card:hover {
+    border-color: var(--border-hover);
+    background: var(--black3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .aud-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; color: rgba(255,255,255,0.5);
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+  .aud-icon svg { width: 18px; height: 18px; }
+  .aud-card:hover .aud-icon {
+    border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.06);
+  }
+  .aud-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .aud-desc { font-size: 12px; color: var(--gray4); line-height: 1.5; }
+  .aud-count {
+    margin-top: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--gray5); padding: 4px 12px; border-radius: 100px;
+    background: rgba(255,255,255,0.04); display: inline-block;
+  }
+
+  /* TESTIMONIAL / QUOTE */
+  .quote-section {
+    max-width: 860px; margin: 0 auto; padding: 60px 60px;
+    text-align: center;
+  }
+  .quote-mark {
+    font-size: 64px; line-height: 1; color: var(--gray2);
+    font-family: Georgia, serif; margin-bottom: 20px; display: block;
+    letter-spacing: -2px;
+  }
+  .quote-text {
+    font-size: clamp(20px, 2.8vw, 32px); font-weight: 600; letter-spacing: -0.5px;
+    line-height: 1.4; color: var(--gray6); margin-bottom: 28px;
+    font-style: italic;
+  }
+  .quote-author {
+    font-size: 12px; color: var(--gray3); letter-spacing: 1px; text-transform: uppercase;
+  }
+  .quote-author strong { color: var(--gray5); font-weight: 600; letter-spacing: 0; text-transform: none; }
+
+  /* CTA FINAL */
+  .cta-section {
+    max-width: 1200px; margin: 0 auto 0;
+    padding: 60px;
+  }
+  .cta-box {
+    background: var(--black2); border: 1px solid var(--border); border-radius: 24px;
+    padding: 80px 80px; text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-box::before {
+    content: ''; position: absolute; top: -1px; left: 20%; right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  }
+  .cta-grid-bg {
+    position: absolute; inset: 0; opacity: 0.4;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .cta-content { position: relative; z-index: 1; }
+  .cta-title {
+    font-size: clamp(36px, 5vw, 64px); font-weight: 900; letter-spacing: -2px;
+    line-height: 1.05; margin-bottom: 20px;
+  }
+  .cta-sub { font-size: 16px; color: var(--gray4); max-width: 480px; margin: 0 auto 40px; line-height: 1.6; }
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cta-note { font-size: 11px; color: var(--gray3); margin-top: 20px; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px; max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo {
+    font-size: 15px; font-weight: 800;
+    background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 200% 100%; animation: shimmer 4s linear infinite;
+  }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 12px; color: var(--gray4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: white; }
+  .footer-copy { font-size: 12px; color: var(--gray3); }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* LINES DIVIDER */
+  .divider {
+    border: none; border-top: 1px solid var(--border);
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  /* NAV ACTIVE */
+  .nav-links a.active { color: white; }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: none; padding: 6px; z-index: 200;
+  }
+  .hamburger span { display: block; width: 22px; height: 2px; background: white; border-radius: 2px; transition: all 0.35s cubic-bezier(0.16,1,0.3,1); }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MOBILE NAV OVERLAY */
+  .nav-mobile {
+    position: fixed; inset: 0; z-index: 150;
+    background: rgba(0,0,0,0.97); backdrop-filter: blur(24px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 48px;
+    transform: translateX(100%); transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+  .nav-mobile.open { transform: translateX(0); pointer-events: all; }
+  .nav-mobile ul { list-style: none; text-align: center; display: flex; flex-direction: column; gap: 8px; }
+  .nav-mobile-link {
+    font-size: clamp(28px, 7vw, 40px); font-weight: 800; color: var(--gray3);
+    text-decoration: none; letter-spacing: -1px; padding: 8px 0;
+    display: block; transition: color 0.2s;
+  }
+  .nav-mobile-link:hover { color: white; }
+  .nav-mobile-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .nav-mobile-btn {
+    padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    cursor: none; font-family: inherit; transition: all 0.2s;
+  }
+  .nav-mobile-btn-ghost { background: transparent; color: var(--gray5); border: 1px solid var(--border); }
+  .nav-mobile-btn-ghost:hover { color: white; border-color: var(--border-hover); }
+  .nav-mobile-btn-solid { background: white; color: black; border: none; }
+  .nav-mobile-btn-solid:hover { background: var(--gray6); }
+
+  /* TABLET: 2-col features */
+  @media (min-width: 500px) and (max-width: 900px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 80px 24px; }
+    .stats-band-inner { grid-template-columns: repeat(2, 1fr); }
+    .stat-card:nth-child(2) { border-right: none; }
+    .stat-card:nth-child(3) { border-top: 1px solid var(--border); }
+    .stat-card:nth-child(4) { border-right: none; border-top: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; gap: 40px; }
+    .steps::before { display: none; }
+    .demo-section { grid-template-columns: 1fr; padding: 40px 24px; }
+    .demo-card { transform: none; }
+    .audience-grid { grid-template-columns: repeat(2, 1fr); }
+    .cta-section { padding: 40px 24px; }
+    .cta-box { padding: 48px 32px; }
+    footer { padding: 32px 24px; flex-direction: column; text-align: center; }
+    .hero-stats { gap: 16px; margin-top: 40px; }
+    .hero-stat-sep { display: none; }
+    .quote-section { padding: 60px 24px; }
+    .hero { padding: 100px 24px 60px; }
+  }
+
+  @media (max-width: 480px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .audience-grid { grid-template-columns: 1fr; }
+    .hero-title { letter-spacing: -2px; }
+    .cta-btns { flex-direction: column; align-items: center; }
+    .cta-btns button { width: 100%; max-width: 280px; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="progress-bar"></div>
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="nav-mobile" id="nav-mobile">
+  <ul>
+    <li><a href="#features" class="nav-mobile-link">Funcionalidades</a></li>
+    <li><a href="#como-funciona" class="nav-mobile-link">Como funciona</a></li>
+    <li><a href="#para-quem" class="nav-mobile-link">Para quem</a></li>
+  </ul>
+  <div class="nav-mobile-btns">
+    <button class="nav-mobile-btn nav-mobile-btn-ghost" onclick="window.location.href='/'">Entrar</button>
+    <button class="nav-mobile-btn nav-mobile-btn-solid" onclick="window.location.href='/'">Começar grátis</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">CAPTAMOS</div>
+  <ul class="nav-links">
+    <li><a href="#features">Funcionalidades</a></li>
+    <li><a href="#como-funciona">Como funciona</a></li>
+    <li><a href="#para-quem">Para quem</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-nav" onclick="window.location.href='/'">Entrar</button>
+    <button class="btn-nav btn-nav-primary" onclick="window.location.href='/'">Começar grátis</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    +1.100 fundos disponíveis em tempo real
+  </div>
+
+  <h1 class="hero-title">
+    O financiamento<br>que a tua empresa<br><span class="chrome-text">merece.</span>
+  </h1>
+
+  <p class="hero-sub">
+    IA que analisa a tua empresa, encontra os fundos certos e <strong>redige as candidaturas por ti.</strong>
+  </p>
+
+  <p class="hero-typewriter">
+    Compatível com&nbsp;<span id="typewriter-text"></span><span id="cursor-blink">|</span>
+  </p>
+
+  <div class="hero-ctas">
+    <button class="btn-primary" onclick="window.location.href='/'">Começar grátis &nbsp;→</button>
+    <button class="btn-ghost" onclick="document.getElementById('como-funciona').scrollIntoView({behavior:'smooth'})">Ver como funciona</button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-n" data-target="1133">0</div>
+      <div class="hero-stat-l">Fundos na base de dados</div>
+    </div>
+    <div class="hero-stat-sep"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-n">€450B+</div>
+      <div class="hero-stat-l">Financiamento disponível</div>
+    </div>
+    <div class="hero-stat-sep"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-n" data-target="89">0</div>
+      <div class="hero-stat-l">% precisão do matching</div>
+    </div>
+    <div class="hero-stat-sep"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-n" data-target="3">0</div>
+      <div class="hero-stat-l">× mais rápido que consultores</div>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span class="ticker-dot"></span>PT2030</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>PRR</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Horizonte Europa</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>EIC Accelerator</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>IAPMEI</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>FCT</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Erasmus+</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>LIFE</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>InvestEU</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>COSME</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>ANI</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AICEP</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Creative Europe</span>
+    <!-- duplicate for loop -->
+    <span class="ticker-item"><span class="ticker-dot"></span>PT2030</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>PRR</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Horizonte Europa</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>EIC Accelerator</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>IAPMEI</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>FCT</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Erasmus+</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>LIFE</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>InvestEU</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>COSME</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>ANI</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AICEP</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Creative Europe</span>
+  </div>
+</div>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stats-band-inner">
+    <div class="stat-card reveal">
+      <div class="stat-num" data-target="1133">0</div>
+      <div class="stat-label">Fundos ativos</div>
+      <div class="stat-desc">PT, UE e internacionais</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-1">
+      <div class="stat-num">€450B</div>
+      <div class="stat-label">Capital disponível</div>
+      <div class="stat-desc">Em programas abertos</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-2">
+      <div class="stat-num" data-target="24">0</div>
+      <div class="stat-label">Segundos para matching</div>
+      <div class="stat-desc">vs. semanas de consultor</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-3">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Gratuito para começar</div>
+      <div class="stat-desc">Sem cartão de crédito</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features" style="max-width:1200px">
+  <div class="section-label reveal">Funcionalidades</div>
+  <h2 class="section-title reveal">Tudo o que precisas,<br>numa só plataforma.</h2>
+  <div class="features-grid reveal">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div class="feat-title">Quick Match com IA</div>
+      <div class="feat-desc">Introduz o teu site ou NIF. A IA analisa a empresa e identifica os fundos mais adequados em segundos.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><circle cx="11" cy="11" r="3"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="feat-title">Matching por Projeto</div>
+      <div class="feat-desc">Define o teu projeto com TRL, setor e orçamento. Recebe scoring detalhado de elegibilidade para cada fundo.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="feat-title">Candidaturas Assistidas</div>
+      <div class="feat-desc">A IA gera questões específicas por fundo, redige respostas e lista os documentos necessários.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="12" y1="2" x2="12" y2="4"/></svg>
+      </div>
+      <div class="feat-title">Alertas Inteligentes</div>
+      <div class="feat-desc">Sê notificado quando um fundo relevante abre, reabre ou está prestes a encerrar.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+      </div>
+      <div class="feat-title">Análise de Candidatura</div>
+      <div class="feat-desc">A IA avalia a qualidade da tua candidatura, identifica pontos fracos e sugere melhorias concretas.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <div class="feat-title">Estimativa de Financiamento</div>
+      <div class="feat-desc">Calcula automaticamente o financiamento estimado com base no teu orçamento e na taxa de co-financiamento.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona" style="max-width:1200px">
+  <div class="section-label reveal">Como funciona</div>
+  <h2 class="section-title reveal">Três passos.<br>Um resultado.</h2>
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3 class="step-title">Analisa a tua empresa</h3>
+      <p class="step-desc">Introduz o teu site ou NIF. A nossa IA lê o teu perfil público, identifica setor, dimensão, CAE e modelo de negócio.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3 class="step-title">Recebe os fundos certos</h3>
+      <p class="step-desc">Matching automático com mais de 1.100 fundos por relevância, elegibilidade e potencial financeiro real.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3 class="step-title">Candidatura com IA</h3>
+      <p class="step-desc">Questões específicas geradas por fundo, respostas redigidas pela IA, checklist de documentos completo.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- DEMO SECTION -->
+<div class="demo-section">
+  <div class="demo-card reveal">
+    <div class="demo-topbar">
+      <div class="demo-dot" style="background:#ff5f57"></div>
+      <div class="demo-dot" style="background:#febc2e"></div>
+      <div class="demo-dot" style="background:#28c840"></div>
+      <div class="demo-url">captamos.pt/fundos</div>
+    </div>
+    <div class="demo-body">
+      <div class="demo-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>&nbsp;Fundos para startups de tecnologia em Lisboa...</div>
+
+      <div class="demo-grant" style="animation: fadeUp 0.5s ease both 0.2s">
+        <div class="demo-grant-top">
+          <div>
+            <div class="demo-grant-title">EIC Accelerator — European Innovation Council</div>
+            <div class="demo-grant-source">Comissão Europeia / EIC</div>
+          </div>
+          <div class="demo-grant-amount">€2.5M</div>
+        </div>
+        <span class="demo-tag">tecnologia</span>
+        <span class="demo-tag">startup</span>
+        <span class="demo-tag">deep tech</span>
+        <span class="demo-score">92 relevância</span>
+        <div class="demo-grant-bar"><div class="demo-grant-fill" style="width:92%"></div></div>
+      </div>
+
+      <div class="demo-grant" style="animation: fadeUp 0.5s ease both 0.35s">
+        <div class="demo-grant-top">
+          <div>
+            <div class="demo-grant-title">PT2030 — SI Inovação Empresarial</div>
+            <div class="demo-grant-source">PT2030 / COMPETE</div>
+          </div>
+          <div class="demo-grant-amount">€25M</div>
+        </div>
+        <span class="demo-tag">inovação</span>
+        <span class="demo-tag">PME</span>
+        <span class="demo-score">78 relevância</span>
+        <div class="demo-grant-bar"><div class="demo-grant-fill" style="width:78%"></div></div>
+      </div>
+
+      <div class="demo-grant" style="animation: fadeUp 0.5s ease both 0.5s">
+        <div class="demo-grant-top">
+          <div>
+            <div class="demo-grant-title">Horizonte Europa — EIC Pathfinder</div>
+            <div class="demo-grant-source">Comissão Europeia / EIC</div>
+          </div>
+          <div class="demo-grant-amount">€4M</div>
+        </div>
+        <span class="demo-tag">investigação</span>
+        <span class="demo-tag">deep tech</span>
+        <span class="demo-score">71 relevância</span>
+        <div class="demo-grant-bar"><div class="demo-grant-fill" style="width:71%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-info reveal reveal-delay-1">
+    <div class="section-label">Matching em tempo real</div>
+    <h2 class="section-title" style="font-size:clamp(28px,3vw,46px)">A tua empresa. Os fundos certos.</h2>
+    <p class="section-sub">Não percas tempo a pesquisar centenas de programas. A IA faz o trabalho pesado por ti.</p>
+    <div class="demo-checks">
+      <div class="demo-check">
+        <div class="demo-check-icon"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="demo-check-text"><strong>Score de relevância 0-100</strong> para cada fundo — sabes imediatamente qual priorizar.</div>
+      </div>
+      <div class="demo-check">
+        <div class="demo-check-icon"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="demo-check-text"><strong>Elegibilidade verificada</strong> por setor, CAE, dimensão, TRL e tipo de entidade.</div>
+      </div>
+      <div class="demo-check">
+        <div class="demo-check-icon"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="demo-check-text"><strong>Estimativa de financiamento</strong> calculada com base no teu orçamento real.</div>
+      </div>
+      <div class="demo-check">
+        <div class="demo-check-icon"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="demo-check-text"><strong>Link direto</strong> à página oficial de candidatura de cada fundo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- AUDIENCE -->
+<section id="para-quem" style="max-width:1200px">
+  <div class="section-label reveal">Para quem</div>
+  <h2 class="section-title reveal">Feito para quem<br>quer crescer.</h2>
+  <div class="audience-grid reveal">
+    <div class="aud-card">
+      <div class="aud-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+      </div>
+      <div class="aud-title">Startups</div>
+      <div class="aud-desc">EIC Accelerator, IAPMEI Startup Voucher, PRR Agendas de Inovação</div>
+      <div class="aud-count">320+ fundos</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      </div>
+      <div class="aud-title">PMEs</div>
+      <div class="aud-desc">PT2030 SI Inovação, COSME, Linha PME Crescimento, IEFP</div>
+      <div class="aud-count">480+ fundos</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5z"/></svg>
+      </div>
+      <div class="aud-title">Investigadores</div>
+      <div class="aud-desc">FCT Projetos, MSCA Fellowships, ERC Synergy Grants, Horizonte Europa</div>
+      <div class="aud-count">190+ fundos</div>
+    </div>
+    <div class="aud-card">
+      <div class="aud-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4m-4.76 5.74L9 15m6 1.74L13.76 15"/><line x1="7" y1="19" x2="17" y2="19"/></svg>
+      </div>
+      <div class="aud-title">Outras Entidades</div>
+      <div class="aud-desc">Municípios, ONG, Universidades, Cooperativas, Agricultores</div>
+      <div class="aud-count">140+ fundos</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <span class="quote-mark">"</span>
+  <p class="quote-text">Em menos de dois minutos encontrámos três fundos que nunca teríamos descoberto sozinhos. A candidatura ficou pronta em dois dias.</p>
+  <p class="quote-author"><strong>João Ferreira</strong> — CEO, TechStartup Lisboa</p>
+</div>
+
+<hr class="divider">
+
+<!-- FINAL CTA -->
+<div class="cta-section">
+  <div class="cta-box reveal">
+    <div class="cta-grid-bg"></div>
+    <div class="cta-content">
+      <h2 class="cta-title">Começa hoje.<br>É <span class="chrome-text" style="background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:300% 100%;animation:shimmer 6s linear infinite">gratuito.</span></h2>
+      <p class="cta-sub">Analisa a tua empresa, encontra os fundos certos e começa a candidatura em minutos.</p>
+      <div class="cta-btns">
+        <button class="btn-primary" style="font-size:15px;padding:16px 36px" onclick="window.location.href='/'">Começar agora →</button>
+        <button class="btn-ghost" style="font-size:15px;padding:16px 36px" onclick="window.location.href='mailto:hello@captamos.pt'">Falar com um especialista</button>
+      </div>
+      <p class="cta-note">Sem cartão de crédito · Sem compromisso · Resultados imediatos</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CAPTAMOS</div>
+  <div class="footer-links">
+    <a href="#features">Sobre nós</a>
+    <a href="#privacidade">Privacidade</a>
+    <a href="#termos">Termos</a>
+    <a href="mailto:hello@captamos.pt">Contacto</a>
+  </div>
+  <div class="footer-copy">© 2025 Captamos. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor')
+const ring = document.getElementById('cursor-ring')
+let mx = 0, my = 0, rx = 0, ry = 0
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY
+  cursor.style.left = mx + 'px'
+  cursor.style.top = my + 'px'
+})
+function animateRing() {
+  rx += (mx - rx) * 0.12
+  ry += (my - ry) * 0.12
+  ring.style.left = rx + 'px'
+  ring.style.top = ry + 'px'
+  requestAnimationFrame(animateRing)
+}
+animateRing()
+
+// HAMBURGER
+const hamburger = document.getElementById('hamburger')
+const navMobile = document.getElementById('nav-mobile')
+hamburger.addEventListener('click', () => {
+  const isOpen = hamburger.classList.toggle('open')
+  navMobile.classList.toggle('open', isOpen)
+  document.body.style.overflow = isOpen ? 'hidden' : ''
+})
+document.querySelectorAll('.nav-mobile-link').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open')
+    navMobile.classList.remove('open')
+    document.body.style.overflow = ''
+  })
+})
+
+// SCROLL PROGRESS + SCROLL SPY
+const progressBar = document.getElementById('progress-bar')
+const nav = document.getElementById('nav')
+const navLinks = document.querySelectorAll('.nav-links a')
+const spySections = ['features', 'como-funciona', 'para-quem']
+
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+  progressBar.style.width = pct + '%'
+  nav.classList.toggle('scrolled', window.scrollY > 60)
+
+  // Scroll spy
+  let current = ''
+  spySections.forEach(id => {
+    const el = document.getElementById(id)
+    if (el && window.scrollY >= el.offsetTop - 140) current = id
+  })
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current))
+}, { passive: true })
+
+// TYPEWRITER
+const words = ['PT2030.', 'PRR.', 'Horizonte Europa.', 'EIC Accelerator.', 'IAPMEI.', 'FCT.', 'Erasmus+.']
+let wi = 0, ci = 0, deleting = false
+const twEl = document.getElementById('typewriter-text')
+const blinkEl = document.getElementById('cursor-blink')
+blinkEl.style.animation = 'blink 1s step-end infinite'
+const style = document.createElement('style')
+style.textContent = '@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}'
+document.head.appendChild(style)
+
+function typeLoop() {
+  const word = words[wi]
+  if (!deleting) {
+    ci++
+    twEl.textContent = word.slice(0, ci)
+    if (ci === word.length) { deleting = true; setTimeout(typeLoop, 1800); return }
+    setTimeout(typeLoop, 80)
+  } else {
+    ci--
+    twEl.textContent = word.slice(0, ci)
+    if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(typeLoop, 300); return }
+    setTimeout(typeLoop, 45)
+  }
+}
+setTimeout(typeLoop, 1200)
+
+// COUNTER ANIMATION
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target)
+  if (!target) return
+  const suffix = el.textContent.includes('+') ? '+' : (el.textContent.includes('×') ? '×' : '')
+  let start = null
+  const duration = 1800
+  function step(ts) {
+    if (!start) start = ts
+    const progress = Math.min((ts - start) / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 3)
+    el.textContent = Math.round(eased * target) + suffix
+    if (progress < 1) requestAnimationFrame(step)
+  }
+  requestAnimationFrame(step)
+}
+
+// REVEAL ON SCROLL
+const reveals = document.querySelectorAll('.reveal')
+const counters = document.querySelectorAll('[data-target]')
+const observed = new Set()
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible')
+      io.unobserve(entry.target)
+    }
+  })
+}, { threshold: 0.1 })
+reveals.forEach(el => io.observe(el))
+
+const counterIo = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !observed.has(entry.target)) {
+      observed.add(entry.target)
+      animateCounter(entry.target)
+    }
+  })
+}, { threshold: 0.5 })
+counters.forEach(el => counterIo.observe(el))
+
+// FEAT CARD SPOTLIGHT
+document.querySelectorAll('.feat-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    card.style.setProperty('--mx', x + '%')
+    card.style.setProperty('--my', y + '%')
+  })
+})
+
+// CARD 3D TILT (demo card)
+const demoCard = document.querySelector('.demo-card')
+if (demoCard) {
+  demoCard.parentElement.addEventListener('mousemove', e => {
+    const rect = demoCard.getBoundingClientRect()
+    const x = (e.clientX - rect.left - rect.width / 2) / 20
+    const y = (e.clientY - rect.top - rect.height / 2) / 20
+    demoCard.style.transform = `perspective(1000px) rotateY(${-5 + x * 0.5}deg) rotateX(${2 - y * 0.3}deg)`
+  })
+  demoCard.parentElement.addEventListener('mouseleave', () => {
+    demoCard.style.transform = 'perspective(1000px) rotateY(-5deg) rotateX(2deg)'
+  })
+}
+
+// HERO STATS initial trigger
+window.dispatchEvent(new Event('scroll'))
+</script>
+</body>
+</html>
