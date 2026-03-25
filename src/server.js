@@ -75,6 +75,30 @@ app.post('/api/beneficiaries/scrape-recent', async (req, res) => {
   }
 })
 
+// DRE Despacho scraper — fetches latest despachos and extracts beneficiary tables
+app.post('/api/beneficiaries/scrape-dre', async (req, res) => {
+  try {
+    const { runDREDespachoScraper } = require('./jobs/dreDespachoScraper')
+    // Run in background, respond immediately
+    res.json({ ok: true, message: 'A processar despachos do DRE em background...' })
+    runDREDespachoScraper()
+      .then(r => console.log('[DRE] Background completo:', r))
+      .catch(e => console.error('[DRE] Erro background:', e.message))
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// DRE despachos processed — list
+app.get('/api/beneficiaries/dre-despachos', (req, res) => {
+  try {
+    const { getRecentDespachos } = require('./jobs/dreDespachoScraper')
+    res.json(getRecentDespachos(50))
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // Recent decisions endpoint — returns beneficiaries filtered by date
 app.get('/api/beneficiaries/since/:months', (req, res) => {
   try {

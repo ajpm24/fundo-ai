@@ -1252,7 +1252,7 @@ function seedGrants() {
   } catch (e) { /* use hardcoded fallback */ }
 
   const upsert = db.prepare(`
-    INSERT OR REPLACE INTO grants (
+    INSERT INTO grants (
       title, source, description, max_amount, min_amount, deadline,
       eligible_sectors, eligible_sizes, eligible_entities, eligible_countries,
       url, is_active, funding_type, funding_rate, region, category, cofinancing_rate,
@@ -1265,6 +1265,20 @@ function seedGrants() {
       @trl_min, @trl_max, @consortium_required, @call_status, @expected_next_open,
       @history_years, @ai_relevance_score, @ai_relevance_reason
     )
+    ON CONFLICT(title) DO UPDATE SET
+      source=excluded.source, description=excluded.description,
+      max_amount=excluded.max_amount, min_amount=excluded.min_amount,
+      deadline=excluded.deadline, eligible_sectors=excluded.eligible_sectors,
+      eligible_sizes=excluded.eligible_sizes, eligible_entities=excluded.eligible_entities,
+      eligible_countries=excluded.eligible_countries, url=excluded.url,
+      is_active=excluded.is_active, funding_type=excluded.funding_type,
+      funding_rate=excluded.funding_rate, region=excluded.region,
+      category=excluded.category, cofinancing_rate=excluded.cofinancing_rate,
+      trl_min=excluded.trl_min, trl_max=excluded.trl_max,
+      consortium_required=excluded.consortium_required, call_status=excluded.call_status,
+      expected_next_open=excluded.expected_next_open, history_years=excluded.history_years,
+      ai_relevance_score=excluded.ai_relevance_score, ai_relevance_reason=excluded.ai_relevance_reason,
+      updated_at=datetime('now')
   `)
   const upsertMany = db.transaction((rows) => {
     let added = 0

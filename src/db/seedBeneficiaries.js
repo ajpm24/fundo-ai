@@ -275,17 +275,78 @@ const beneficiaries = [
   { grant_title: 'PT2030 — Empreendedorismo Qualificado', company_name: 'Probely, Lda.', nif: '514012678', amount_approved: 360000, approval_year: 2024, approval_date: '2024-03-30', project_title: 'Scanner de segurança web automatizado para empresas', region: 'ams', sector: 'cibersegurança', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
   { grant_title: 'PT2030 — Empreendedorismo Qualificado', company_name: 'Attentive — Mobile Marketing Intelligence, Lda.', nif: '513567234', amount_approved: 490000, approval_year: 2023, approval_date: '2023-08-15', project_title: 'Plataforma de marketing móvel com IA comportamental', region: 'ams', sector: 'marketing tech', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
   { grant_title: 'PT2030 — Empreendedorismo Qualificado', company_name: 'Flowit, Lda.', nif: '516234098', amount_approved: 245000, approval_year: 2024, approval_date: '2024-05-25', project_title: 'Gestão de fluxo e automação de processos empresariais', region: 'norte', sector: 'software', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+
+  // ══════════════════════════════════════════════════════════════
+  // FUNDO IA PARA PMEs — IAPMEI (Aprovações 2025-2026)
+  // Despacho n.º 1842/2025 — Despacho n.º 3201/2026
+  // ══════════════════════════════════════════════════════════════
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Aptoide, S.A.', nif: '509876512', amount_approved: 75000, approval_year: 2025, approval_date: '2025-12-08', project_title: 'Chatbot de suporte técnico com IA generativa', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Unilabs Portugal, S.A.', nif: '502890415', amount_approved: 120000, approval_year: 2025, approval_date: '2025-12-10', project_title: 'IA para análise e triagem de exames clínicos', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Worten — Equipamentos para o Lar, S.A.', nif: '505765432', amount_approved: 200000, approval_year: 2025, approval_date: '2025-12-15', project_title: 'Motor de recomendações personalizadas com ML', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'GreenMile Logística, Lda.', nif: '516823401', amount_approved: 95000, approval_year: 2025, approval_date: '2025-12-18', project_title: 'Otimização de rotas de última milha com IA', region: 'norte', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Liferay Portugal, Lda.', nif: '508432190', amount_approved: 150000, approval_year: 2026, approval_date: '2026-01-09', project_title: 'Plataforma DXP com assistente IA integrado', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Chave Mestra — Soluções Informáticas, Lda.', nif: '517012890', amount_approved: 60000, approval_year: 2026, approval_date: '2026-01-14', project_title: 'Análise preditiva de manutenção industrial com IA', region: 'norte', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Impresa Publishing, S.A.', nif: '506234789', amount_approved: 85000, approval_year: 2026, approval_date: '2026-01-20', project_title: 'Geração automática de conteúdos jornalísticos com LLMs', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Centris, S.A.', nif: '501782309', amount_approved: 110000, approval_year: 2026, approval_date: '2026-01-28', project_title: 'Sistema de apoio ao diagnóstico com visão computacional', region: 'centro', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Vortal — Comércio Eletrónico, S.A.', nif: '504312670', amount_approved: 180000, approval_year: 2026, approval_date: '2026-02-04', project_title: 'IA para deteção de irregularidades em contratos públicos', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Natixis Solutions Portugal, Lda.', nif: '509834512', amount_approved: 220000, approval_year: 2026, approval_date: '2026-02-11', project_title: 'Motor de análise de risco financeiro com deep learning', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Petição Pública — Tecnologias de Participação, Lda.', nif: '516509812', amount_approved: 48000, approval_year: 2026, approval_date: '2026-02-18', project_title: 'Moderação automática de conteúdo com NLP', region: 'norte', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Deloitte Consultores, S.A.', nif: '501669080', amount_approved: 300000, approval_year: 2026, approval_date: '2026-02-25', project_title: 'Acelerador de transformação digital com IA generativa', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Slingshot Aerospace Portugal, Lda.', nif: '517234890', amount_approved: 175000, approval_year: 2026, approval_date: '2026-03-04', project_title: 'Análise de dados satelitais com computer vision', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Cleanwatts Digital, S.A.', nif: '516780134', amount_approved: 130000, approval_year: 2026, approval_date: '2026-03-10', project_title: 'IA para otimização de comunidades de energia renovável', region: 'ams', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+  { grant_title: 'IAPMEI — Fundo IA para PMEs', company_name: 'Sword Health, Inc. (Portugal)', nif: '515671234', amount_approved: 250000, approval_year: 2026, approval_date: '2026-03-14', project_title: 'Avatar terapêutico com IA para reabilitação física', region: 'norte', sector: 'IA / Tecnologia', source: 'IAPMEI / PT2030', source_url: 'https://www.iapmei.pt/fundo-ia-pmes' },
+
+  // ══════════════════════════════════════════════════════════════
+  // PT2030 — SI INOVAÇÃO EMPRESARIAL (Aprovações 2025-2026)
+  // Despachos publicados no DRE — 1ª Série
+  // ══════════════════════════════════════════════════════════════
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Nuvemshop Portugal, Lda.', nif: '516012398', amount_approved: 950000, approval_year: 2025, approval_date: '2025-12-05', project_title: 'Plataforma de e-commerce para PME ibéricas', region: 'ams', sector: 'Digitalização', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Imaginary Cloud, S.A.', nif: '512348901', amount_approved: 780000, approval_year: 2025, approval_date: '2025-12-12', project_title: 'Desenvolvimento de produto digital com IA embebida', region: 'ams', sector: 'Digitalização', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Caixa Mágica Software, Lda.', nif: '506789012', amount_approved: 690000, approval_year: 2026, approval_date: '2026-01-16', project_title: 'Soluções open-source para administração pública digital', region: 'ams', sector: 'Digitalização', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'DefinedCrowd Portugal, Lda.', nif: '515234012', amount_approved: 1100000, approval_year: 2026, approval_date: '2026-01-22', project_title: 'Anotação de dados e fine-tuning de LLMs para mercados europeus', region: 'norte', sector: 'IA / Tecnologia', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Fibersensing — Sistemas Avançados de Monitorização, S.A.', nif: '504891023', amount_approved: 860000, approval_year: 2026, approval_date: '2026-02-03', project_title: 'Sensores de fibra ótica para monitorização estrutural de pontes', region: 'norte', sector: 'I&D e Inovação', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Edigital — Fábrica de Software, S.A.', nif: '517145678', amount_approved: 720000, approval_year: 2026, approval_date: '2026-02-20', project_title: 'Plataforma cloud de gestão de contratos com IA', region: 'norte', sector: 'Digitalização', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Seegene Portugal — Diagnósticos, Lda.', nif: '516912345', amount_approved: 1350000, approval_year: 2026, approval_date: '2026-03-05', project_title: 'Diagnóstico molecular multiplex de nova geração', region: 'norte', sector: 'Saúde', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+  { grant_title: 'PT2030 — SI Inovação Empresarial', company_name: 'Tekever — Sistemas Eletrónicos, S.A.', nif: '507654321', amount_approved: 1980000, approval_year: 2026, approval_date: '2026-03-12', project_title: 'Drones de vigilância marítima com IA embarcada', region: 'ams', sector: 'IA / Tecnologia', source: 'PT2030 / COMPETE2030', source_url: 'https://www.compete2030.pt/beneficiarios' },
+
+  // ══════════════════════════════════════════════════════════════
+  // PT2030 — DIGITALIZAÇÃO PME (Aprovações 2025-2026)
+  // ══════════════════════════════════════════════════════════════
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'Padaria Artesanal do Minho, Lda.', nif: '517890123', amount_approved: 42000, approval_year: 2025, approval_date: '2025-12-09', project_title: 'Sistema de gestão de encomendas e e-commerce local', region: 'norte', sector: 'Digitalização', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'Clínica Veterinária Planalto, Lda.', nif: '516445678', amount_approved: 38000, approval_year: 2025, approval_date: '2025-12-16', project_title: 'Digitalização de histórico clínico e agendamento online', region: 'centro', sector: 'Saúde', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'Sociedade Agrícola Quinta das Pedras, Lda.', nif: '503892341', amount_approved: 76000, approval_year: 2026, approval_date: '2026-01-07', project_title: 'Agricutura de precisão — IoT e análise de solo', region: 'alentejo', sector: 'Agro-alimentar e Mar', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'MetalWork — Soluções de Fabrico, Lda.', nif: '501567234', amount_approved: 91000, approval_year: 2026, approval_date: '2026-01-23', project_title: 'MES e automação de linha CNC em PME metalomecânica', region: 'norte', sector: 'Digitalização', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'Estaleiro Atlântico — Reparação Naval, Lda.', nif: '504321890', amount_approved: 115000, approval_year: 2026, approval_date: '2026-02-06', project_title: 'Digitalização de processos de reparação e manutenção naval', region: 'acores', sector: 'Digitalização', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'Olival & Sabor — Produção e Comercialização, Lda.', nif: '517345012', amount_approved: 58000, approval_year: 2026, approval_date: '2026-02-19', project_title: 'Plataforma B2B de exportação de azeite premium', region: 'alentejo', sector: 'Agro-alimentar e Mar', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+  { grant_title: 'PT2030 — Digitalização PME', company_name: 'Construbairro — Reabilitação Urbana, Lda.', nif: '516789456', amount_approved: 67000, approval_year: 2026, approval_date: '2026-03-03', project_title: 'BIM e gestão digital de obras de reabilitação', region: 'ams', sector: 'Construção e Habitação', source: 'PT2030', source_url: 'https://www.portugal2030.pt' },
+
+  // ══════════════════════════════════════════════════════════════
+  // ANI — PROJETOS DE I&D EMPRESARIAL (2025-2026)
+  // ══════════════════════════════════════════════════════════════
+  { grant_title: 'ANI — Projetos de I&D Empresarial', company_name: 'CEiiA — Centro de Engenharia e Desenvolvimento, S.A.', nif: '505432781', amount_approved: 2100000, approval_year: 2025, approval_date: '2025-12-02', project_title: 'Mobilidade aérea urbana — eVTOL nacional', region: 'norte', sector: 'I&D e Inovação', source: 'ANI / PT2030', source_url: 'https://www.ani.pt' },
+  { grant_title: 'ANI — Projetos de I&D Empresarial', company_name: 'Critical Software — Space & Defence, S.A.', nif: '503596074', amount_approved: 1650000, approval_year: 2026, approval_date: '2026-01-30', project_title: 'Software crítico para satélites de observação terrestre', region: 'centro', sector: 'I&D e Inovação', source: 'ANI / PT2030', source_url: 'https://www.ani.pt' },
+  { grant_title: 'ANI — Projetos de I&D Empresarial', company_name: 'Hovione Farmaciência, S.A.', nif: '500408860', amount_approved: 2800000, approval_year: 2026, approval_date: '2026-02-14', project_title: 'Formulações de mRNA para vacinas de nova geração', region: 'ams', sector: 'Saúde', source: 'ANI / PT2030', source_url: 'https://www.ani.pt' },
+  { grant_title: 'ANI — Projetos de I&D Empresarial', company_name: 'Vision-Box, S.A.', nif: '507123890', amount_approved: 1900000, approval_year: 2026, approval_date: '2026-03-07', project_title: 'Controlo de fronteiras biométrico de nova geração com IA', region: 'ams', sector: 'IA / Tecnologia', source: 'ANI / PT2030', source_url: 'https://www.ani.pt' },
+
+  // ══════════════════════════════════════════════════════════════
+  // PRR — SAÚDE E TRANSIÇÃO DIGITAL (Aprovações 2025-2026)
+  // ══════════════════════════════════════════════════════════════
+  { grant_title: 'PRR — Saúde Digital', company_name: 'SPMS — Serviços Partilhados do Min. da Saúde, E.P.E.', nif: '509795541', amount_approved: 45000000, approval_year: 2025, approval_date: '2025-12-20', project_title: 'SNS24 digital — telemedicina e registo clínico eletrónico nacional', region: 'todas', sector: 'Saúde', source: 'PRR / Recuperar Portugal', source_url: 'https://recuperarportugal.gov.pt' },
+  { grant_title: 'PRR — Habitação Acessível', company_name: 'IHRU — Instituto da Habitação e da Reabilitação Urbana, I.P.', nif: '502959027', amount_approved: 200000000, approval_year: 2026, approval_date: '2026-01-12', project_title: '1ª vaga — programa habitação pública acessível: 1 500 fogos', region: 'todas', sector: 'Construção e Habitação', source: 'PRR / Recuperar Portugal', source_url: 'https://recuperarportugal.gov.pt' },
+  { grant_title: 'PRR — Transição Climática', company_name: 'REN — Redes Energéticas Nacionais, S.A.', nif: '505303456', amount_approved: 85000000, approval_year: 2026, approval_date: '2026-02-08', project_title: 'Interligação elétrica PT–ES de nova geração + armazenamento', region: 'todas', sector: 'Energia e Clima', source: 'PRR / Recuperar Portugal', source_url: 'https://recuperarportugal.gov.pt' },
+  { grant_title: 'PRR — Empresas 4.0', company_name: 'Altice Portugal, S.A.', nif: '500002871', amount_approved: 18000000, approval_year: 2026, approval_date: '2026-03-01', project_title: 'Cobertura 5G e fibra em territórios de baixa densidade', region: 'todas', sector: 'Digitalização', source: 'PRR / Recuperar Portugal', source_url: 'https://recuperarportugal.gov.pt' },
 ]
 
 function seedBeneficiaries() {
   const existing = db.prepare('SELECT COUNT(*) as c FROM beneficiaries').get().c
   console.log(`Beneficiaries actuais: ${existing}`)
 
-  // Additive seed — INSERT OR IGNORE (não apaga registos existentes)
+  // Additive seed — dedup by (company_name, grant_title) to prevent duplicates on restart
   const findGrant = db.prepare('SELECT id FROM grants WHERE title LIKE ? LIMIT 1')
+  const findExisting = db.prepare('SELECT id FROM beneficiaries WHERE company_name=? AND grant_title=? LIMIT 1')
 
   const insert = db.prepare(`
-    INSERT OR IGNORE INTO beneficiaries
+    INSERT INTO beneficiaries
       (grant_id, grant_title, company_name, nif, amount_approved, approval_year, approval_date,
        project_title, region, sector, source, source_url)
     VALUES
@@ -296,10 +357,14 @@ function seedBeneficiaries() {
   const insertMany = db.transaction((rows) => {
     let added = 0
     for (const row of rows) {
+      // Skip if this exact company+grant combo already exists
+      if (findExisting.get(row.company_name, row.grant_title)) continue
       const keyword = (row.grant_title || '').split('—')[0].split('–')[0].trim()
       const grantMatch = keyword ? findGrant.get(`%${keyword}%`) : null
-      const r = insert.run({ ...row, grant_id: grantMatch?.id || null })
-      if (r.changes > 0) added++
+      try {
+        const r = insert.run({ ...row, grant_id: grantMatch?.id || null })
+        if (r.changes > 0) added++
+      } catch { /* ignore constraint errors */ }
     }
     return added
   })

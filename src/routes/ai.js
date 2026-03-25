@@ -279,6 +279,10 @@ Responde APENAS em JSON válido:
     const insertMany = db.transaction((grants) => {
       const ids = []
       for (const g of grants) {
+        if (!g.title || g.title.length < 5) continue
+        // Skip if title already exists (case-insensitive)
+        const exists = db.prepare('SELECT id FROM grants WHERE lower(trim(title)) = ?').get(g.title.toLowerCase().trim())
+        if (exists) continue
         const r = insert.run(
           g.title, g.source, g.description, g.max_amount || null, g.min_amount || null,
           g.deadline || null,

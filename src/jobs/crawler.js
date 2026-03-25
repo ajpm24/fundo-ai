@@ -58,26 +58,36 @@ function fetchJson(url) {
 
 // ── Insert helper ──────────────────────────────────────────────────────────
 
-const insertStmt = db.prepare(`
-  INSERT OR IGNORE INTO grants
-    (title, source, description, max_amount, min_amount, deadline, eligible_sectors,
-     eligible_sizes, eligible_countries, url, funding_type, region, category,
-     cofinancing_rate, funding_rate, call_status, is_active)
-  VALUES
-    (@title, @source, @description, @max_amount, @min_amount, @deadline, @eligible_sectors,
-     @eligible_sizes, @eligible_countries, @url, @funding_type, @region, @category,
-     @cofinancing_rate, @funding_rate, @call_status, 1)
-`)
+function normalizeTitle(t) {
+  return (t || '').toLowerCase().replace(/[^a-z0-9]/g, ' ').replace(/\s+/g, ' ').trim()
+}
 
 function upsertGrant(g) {
-  const now = new Date().toISOString().split('T')[0]
   const callStatus = g.deadline
     ? (new Date(g.deadline) > new Date() ? 'open' : 'closed')
     : 'open'
-  const r = insertStmt.run({
-    title: g.title?.slice(0, 255) || '',
-    source: g.source?.slice(0, 255) || '',
-    description: g.description?.slice(0, 2000) || '',
+
+  const title = (g.title || '').slice(0, 255)
+  const norm = normalizeTitle(title)
+  if (!norm || norm.length < 5) return 0
+
+  // Skip if a grant with very similar title already exists
+  const existing = db.prepare('SELECT id FROM grants WHERE lower(trim(title)) = ?').get(title.toLowerCase().trim())
+  if (existing) return 0
+
+  const r = db.prepare(`
+    INSERT OR IGNORE INTO grants
+      (title, source, description, max_amount, min_amount, deadline, eligible_sectors,
+       eligible_sizes, eligible_countries, url, funding_type, region, category,
+       cofinancing_rate, funding_rate, call_status, is_active)
+    VALUES
+      (@title, @source, @description, @max_amount, @min_amount, @deadline, @eligible_sectors,
+       @eligible_sizes, @eligible_countries, @url, @funding_type, @region, @category,
+       @cofinancing_rate, @funding_rate, @call_status, 1)
+  `).run({
+    title,
+    source: (g.source || '').slice(0, 255),
+    description: (g.description || '').slice(0, 2000),
     max_amount: g.max_amount || null,
     min_amount: g.min_amount || null,
     deadline: g.deadline || null,
@@ -567,21 +577,20 @@ async function runCrawler() {
 
   const countBefore = db.prepare('SELECT COUNT(*) as c FROM grants').get().c
 
-  const [euCount, aiCount, scrapedCount] = await Promise.allSettled([
+  // Apenas EU Portal oficial — crawlWithAI desativado (gerava duplicados/inventados)
+  const [euCount, scrapedCount] = await Promise.allSettled([
     crawlEUPortal(),
-    crawlWithAI(),
     crawlOfficialSites()
   ]).then(results => results.map(r => r.status === 'fulfilled' ? r.value : 0))
 
   insertCrawlAlert(euCount, 'EU Funding Portal')
-  insertCrawlAlert(aiCount, 'Programas PT/UE (IA)')
-  insertCrawlAlert(scrapedCount, 'Sites Oficiais PT (scraping real)')
+  insertCrawlAlert(scrapedCount, 'Sites Oficiais PT')
   checkReopenedGrants()
 
   const countAfter = db.prepare('SELECT COUNT(*) as c FROM grants').get().c
 
-  console.log(`[Crawler] Done in ${((Date.now() - t) / 1000).toFixed(1)}s. Total: ${countAfter} grants (+${countAfter - countBefore} new). EU=${euCount}, AI=${aiCount}, Scraped=${scrapedCount}`)
-  return { eu: euCount, ai: aiCount, scraped: scrapedCount, total: countAfter, added: countAfter - countBefore }
+  console.log(`[Crawler] Done in ${((Date.now() - t) / 1000).toFixed(1)}s. Total: ${countAfter} grants (+${countAfter - countBefore} new). EU=${euCount}, Scraped=${scrapedCount}`)
+  return { eu: euCount, ai: 0, scraped: scrapedCount, total: countAfter, added: countAfter - countBefore }
 }
 
 module.exports = { runCrawler, crawlOfficialSites }

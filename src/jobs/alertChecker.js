@@ -88,14 +88,14 @@ function startAlertJobs() {
     checkHighRelevanceGrants()
   })
 
-  // Crawler: EU portals every 6h, PT portals daily
-  cron.schedule('0 */6 * * *', () => {
-    console.log('[Crawler] Running 6h crawl...')
+  // Crawler: EU portals semanalmente (domingo às 03:00)
+  cron.schedule('0 3 * * 0', () => {
+    console.log('[Crawler] Running weekly crawl...')
     runCrawler().catch(err => console.error('[Crawler] Error:', err.message))
   })
 
   console.log('[AlertChecker] Scheduled daily at 09:00')
-  console.log('[Crawler] Scheduled every 6h')
+  console.log('[Crawler] Scheduled weekly on Sunday 03:00')
 }
 
 module.exports = { startAlertJobs }

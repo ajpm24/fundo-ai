@@ -131,6 +131,18 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_beneficiaries_grant ON beneficiaries(grant_id);
   CREATE INDEX IF NOT EXISTS idx_beneficiaries_year ON beneficiaries(approval_year);
   CREATE INDEX IF NOT EXISTS idx_beneficiaries_region ON beneficiaries(region);
+
+  CREATE TABLE IF NOT EXISTS dre_despachos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dre_id TEXT UNIQUE,
+    title TEXT,
+    pub_date TEXT,
+    url TEXT,
+    series TEXT,
+    beneficiaries_found INTEGER DEFAULT 0,
+    processed_at TEXT DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_dre_despachos_date ON dre_despachos(pub_date);
 `)
 
 // Migrations: add new columns to existing DB without data loss
